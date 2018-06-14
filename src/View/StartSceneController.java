@@ -75,7 +75,7 @@ public class StartSceneController implements Initializable{
             //btn_start.setLayoutX(anchorPane.getWidth()/2);
             //btn_start.setLayoutY(anchorPane.getHeight()/10);
 
-            textSize.bind(btn_start.heightProperty().divide(7).multiply(btn_start.widthProperty().divide(50)));
+            textSize.bind(btn_start.heightProperty().divide(2));
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
