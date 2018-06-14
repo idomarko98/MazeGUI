@@ -2,6 +2,7 @@ package ViewModel;
 
 
 import Model.IModel;
+import Model.MyModel;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
@@ -67,6 +68,9 @@ public class MyViewModel extends Observable implements Observer{
         model.moveCharacter(movement);
     }
 
+    public static void setConfigurations(int numberOfThreads, String generatingAlgorithmName, String solvingAlgorithmName){
+        IModel.setConfigurations(numberOfThreads, generatingAlgorithmName, solvingAlgorithmName);
+    }
 
     public Maze getMaze(){
         return model.getMaze();

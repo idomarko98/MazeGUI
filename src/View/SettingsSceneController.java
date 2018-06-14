@@ -1,6 +1,7 @@
 package View;
 
 import Server.Server;
+import ViewModel.MyViewModel;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,6 +38,7 @@ public class SettingsSceneController implements Initializable {
     private ToggleGroup generatingAlgorithmGroup;
     private ToggleGroup solvingAlgorithmGroup;
     public javafx.scene.layout.AnchorPane anchorPane;
+
 
     public SettingsSceneController(){
         generatingAlgorithmGroup = new ToggleGroup();
@@ -132,8 +135,10 @@ public class SettingsSceneController implements Initializable {
         }
 
         if(validText){
-            Server.Configurations.setProp(numOfThreads, selectedGeneratingAlgorithm, selectedSolvingAlgorithm);
+            MyViewModel.setConfigurations(numOfThreads, selectedGeneratingAlgorithm, selectedSolvingAlgorithm);
             showAlert("Settings has been changed successfully :)");
+            Stage currentStage = (Stage) ButtonSaveSettings.getScene().getWindow();
+            currentStage.close();
         }
     }
 
@@ -153,6 +158,8 @@ public class SettingsSceneController implements Initializable {
     }
 
     public void CancelSettingsClicked(ActionEvent actionEvent) {
-
+        showAlert("Bye, and enjoy the game!");
+        Stage currentStage = (Stage) ButtonSaveSettings.getScene().getWindow();
+        currentStage.close();
     }
 }
