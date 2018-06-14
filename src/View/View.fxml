@@ -93,7 +93,7 @@
                         </Menu>
                         <Menu mnemonicParsing="false" text="Options">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Properties"/>
+                                <MenuItem onAction="#openSettingsScene" mnemonicParsing="false" text="Properties"/>
                             </items>
                     </Menu>
                         <Menu mnemonicParsing="false" text="Help">

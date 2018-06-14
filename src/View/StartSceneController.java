@@ -122,7 +122,9 @@ public class StartSceneController implements Initializable{
             stage.setTitle("Settings");
             FXMLLoader fxmlLoader = new FXMLLoader();
             Parent root = fxmlLoader.load(getClass().getResource("SettingsScene.fxml").openStream());
+            SettingsSceneController settingsSceneController = fxmlLoader.getController();
             Scene scene = new Scene(root, 700, 400);
+            settingsSceneController.setResizeEvent(scene);
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
             stage.show();
