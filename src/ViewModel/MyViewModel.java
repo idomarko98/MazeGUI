@@ -3,6 +3,7 @@ package ViewModel;
 
 import Model.IModel;
 import Model.MyModel;
+import algorithms.mazeGenerators.IMazeGenerator;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
@@ -70,6 +71,18 @@ public class MyViewModel extends Observable implements Observer{
 
     public static void setConfigurations(int numberOfThreads, String generatingAlgorithmName, String solvingAlgorithmName){
         IModel.setConfigurations(numberOfThreads, generatingAlgorithmName, solvingAlgorithmName);
+    }
+
+    public static int getConfigurationNumberOfThreads(){
+        return IModel.getConfigurationNumberOfThreads();
+    }
+
+    public static IMazeGenerator getConfigurationGeneratingAlgorithm(){
+        return IModel.getConfigurationGeneratingAlgorithm();
+    }
+
+    public static String getConfigurationSolvingAlgorithmName(){
+        return IModel.getConfigurationSolvingAlgorithmName();
     }
 
     public Maze getMaze(){

@@ -1,6 +1,7 @@
 package Model;
 
 import Server.Server;
+import algorithms.mazeGenerators.IMazeGenerator;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
@@ -13,6 +14,19 @@ public interface IModel {
     static void setConfigurations(int numberOfThreads, String generatingAlgorithmName, String solvingAlgorithmName){
         Server.Configurations.setProp(numberOfThreads, generatingAlgorithmName, solvingAlgorithmName);
     }
+
+    static int getConfigurationNumberOfThreads(){
+        return Server.Configurations.getThreadPoolSize();
+    }
+
+    static IMazeGenerator getConfigurationGeneratingAlgorithm(){
+        return Server.Configurations.getMazeGeneratingAlgorithm();
+    }
+
+    static String getConfigurationSolvingAlgorithmName(){
+        return Server.Configurations.getMazeSearchingAlgorithm().getName();
+    }
+
     //int[][] getMaze();
     Maze getMaze();
     Solution getMazeSolution();

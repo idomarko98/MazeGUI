@@ -2,6 +2,9 @@ package View;
 
 import Server.Server;
 import ViewModel.MyViewModel;
+import algorithms.mazeGenerators.IMazeGenerator;
+import algorithms.mazeGenerators.MyMazeGenerator;
+import algorithms.mazeGenerators.SimpleMazeGenerator;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -9,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -80,7 +84,11 @@ public class SettingsSceneController implements Initializable {
             RadioButtonBestAlgorithm.setUserData("MyMazeGenerator");
             RadioButtonSimpleAlgorithm.setToggleGroup(generatingAlgorithmGroup);
             RadioButtonSimpleAlgorithm.setUserData("SimpleMazeGenerator");
-            RadioButtonBestAlgorithm.setSelected(true);
+            IMazeGenerator currGenerateAlgorithm = MyViewModel.getConfigurationGeneratingAlgorithm();
+            if(currGenerateAlgorithm instanceof MyMazeGenerator)
+                RadioButtonBestAlgorithm.setSelected(true);
+            else if(currGenerateAlgorithm instanceof SimpleMazeGenerator)
+                RadioButtonSimpleAlgorithm.setSelected(true);
 
             RadioButtonBreadthFirstSearch.setToggleGroup(solvingAlgorithmGroup);
             RadioButtonBreadthFirstSearch.setUserData("BreadthFirstSearch");
@@ -88,7 +96,15 @@ public class SettingsSceneController implements Initializable {
             RadioButtonDepthFirstSearch.setUserData("DepthFirstSearch");
             RadioButtonBestFirstSearch.setToggleGroup(solvingAlgorithmGroup);
             RadioButtonBestFirstSearch.setUserData("BestFirstSearch");
-            RadioButtonBreadthFirstSearch.setSelected(true);
+            String currSearchingAlgorithm = MyViewModel.getConfigurationSolvingAlgorithmName();
+            for (Toggle rb: solvingAlgorithmGroup.getToggles()) {
+                if(rb.getUserData().toString().equals(currSearchingAlgorithm))
+                    rb.setSelected(true);
+            }
+
+            int currAmountOfThreads = MyViewModel.getConfigurationNumberOfThreads();
+            textFieldNumOfThreads.setText(currAmountOfThreads + "");
+            //RadioButtonBreadthFirstSearch.setSelected(true);
 
             //imageViewMario.layoutXProperty().bind(anchorPane.widthProperty().divide(2));
             //imageViewMario.layoutYProperty().bind(anchorPane.heightProperty().divide(8));
