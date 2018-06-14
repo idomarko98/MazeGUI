@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.Light.Distant?>
 <?import javafx.scene.effect.Lighting?>
 <?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.image.Image?>
@@ -26,9 +25,6 @@
                <bumpInput>
                   <Shadow />
                </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
             </Lighting>
          </effect>
          <font>
@@ -62,9 +58,7 @@
          </font>
       </Button>
       <ImageView fitHeight="233.0" fitWidth="391.0" layoutX="189.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../../Desktop/maze%20images/mario%20settings%20image.jpg" />
-         </image>
+
       </ImageView>
    </children>
 </AnchorPane>
