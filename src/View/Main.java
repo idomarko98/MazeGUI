@@ -40,7 +40,6 @@ public class Main extends Application {
         //--------------
         SetStageCloseEvent(primaryStage);
         primaryStage.show();
-        // Hi im a change
     }
 
     private void SetStageCloseEvent(Stage primaryStage) {

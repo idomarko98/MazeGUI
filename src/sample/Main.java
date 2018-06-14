@@ -31,7 +31,6 @@ public class Main extends Application {
         //playMusic1();
         //playMusicInLoop();
         playMusicInThread();
-        //hi I am other change
     }
 
     private void playMusic1(){
