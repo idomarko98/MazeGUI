@@ -123,7 +123,7 @@ public class StartSceneController implements Initializable{
             FXMLLoader fxmlLoader = new FXMLLoader();
             Parent root = fxmlLoader.load(getClass().getResource("SettingsScene.fxml").openStream());
             SettingsSceneController settingsSceneController = fxmlLoader.getController();
-            Scene scene = new Scene(root, 700, 400);
+            Scene scene = new Scene(root, 600, 400);
             settingsSceneController.setResizeEvent(scene);
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
@@ -144,15 +144,17 @@ public class StartSceneController implements Initializable{
             stage.setScene(scene);
 
             MyModel model = new MyModel();
-            model.startServers();
+            //model.startServers();
             MyViewModel viewModel = new MyViewModel(model);
             model.addObserver(viewModel);
             MyViewController view = fxmlLoader.getController();
             view.setViewModel(viewModel);
             viewModel.addObserver(view);
 
-            stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
+            //stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
             stage.show();
+            Stage currentStage = (Stage) btn_start.getScene().getWindow();
+            currentStage.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

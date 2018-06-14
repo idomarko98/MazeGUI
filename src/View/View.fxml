@@ -42,9 +42,9 @@
                     </rowConstraints>
                     <Label text="Maze rows:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                     <Label text="Maze columns:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                    <TextField fx:id="txtfld_rowsNum" disable="false" text="50" GridPane.columnIndex="1"
+                    <TextField fx:id="txtfld_rowsNum" disable="false" text="20" GridPane.columnIndex="1"
                                GridPane.rowIndex="0"/>
-                    <TextField fx:id="txtfld_columnsNum" disable="false" text="50" GridPane.columnIndex="1"
+                    <TextField fx:id="txtfld_columnsNum" disable="false" text="20" GridPane.columnIndex="1"
                                GridPane.rowIndex="1"/>
                     <Button fx:id="btn_generateMaze" onAction="#generateMaze" prefHeight="25.0" prefWidth="167.0" text="Generate Maze"
                             GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2"/>
@@ -86,7 +86,7 @@
                     <menus>
                         <Menu mnemonicParsing="false" text="File">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="New"/>
+                                <MenuItem onAction="#openStartScene" mnemonicParsing="false" text="New"/>
                                 <MenuItem text="Save"/>
                                 <MenuItem text="Load"/>
                             </items>
@@ -102,9 +102,7 @@
                         <Menu mnemonicParsing="false" text="About">
 
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Exit">
-                            <items>
-                            </items>
+                        <Menu mnemonicParsing="false" onAction="#closeScene" onMenuValidation="#closeScene" text="Exit">
                         </Menu>
                     </menus>
                 </MenuBar>

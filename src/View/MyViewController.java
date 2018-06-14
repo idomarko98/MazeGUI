@@ -19,9 +19,14 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.EventObject;
 import java.util.Observable;
@@ -32,6 +37,11 @@ public class MyViewController implements Observer, IView {
 
     @FXML
     private MyViewModel viewModel;
+    private Thread musicThread;
+    private MediaPlayer themeMediaPlayer;
+    private volatile boolean stopThemeSong = false;
+    //private volatile boolean stopLostSound = false;
+
     public MyMazeDisplayer mazeDisplayer;
     public javafx.scene.control.TextField txtfld_rowsNum;
     public javafx.scene.control.TextField txtfld_columnsNum;
@@ -39,8 +49,6 @@ public class MyViewController implements Observer, IView {
     public javafx.scene.control.Label lbl_columnsNum;
     public javafx.scene.control.Button btn_generateMaze;
     public javafx.scene.control.Button btn_solveMaze;
-
-    public javafx.scene.control.Button hi;
 
     public void setViewModel(MyViewModel viewModel) {
         this.viewModel = viewModel;
@@ -106,12 +114,62 @@ public class MyViewController implements Observer, IView {
         btn_generateMaze.setDisable(true);
         mazeDisplayer.removeSolution();
         viewModel.generateMaze(width, heigth);
+        if(musicThread != null && musicThread.isAlive()) {
+            themeMediaPlayer.stop();
+            stopThemeSong = true;
+        }
+        playTheme();
+    }
+
+    private void playTheme() {
+        stopThemeSong = false;
+        musicThread = new Thread(()->{
+            try {
+                while(!stopThemeSong) {
+                    String musicFile = "resources/Sounds/theme.mp3";
+                    Media sound = new Media(new File(musicFile).toURI().toString());
+                    themeMediaPlayer = new MediaPlayer(sound);
+                    themeMediaPlayer.play();
+
+                    int time = 219000;
+                    Thread.sleep(time);
+                }
+            }
+            catch (Exception e) {System.out.println(e); }
+        });
+        musicThread.start();
     }
 
     public void solveMaze(ActionEvent actionEvent) {
         //showAlert("Solving maze..");
+        stopThemeSong = true;
+        themeMediaPlayer.stop();
+        playClickedOnSolveMusic();
         btn_solveMaze.setDisable(false);
         viewModel.solveMaze();
+    }
+
+    private void playClickedOnSolveMusic() {
+        String musicFile = "resources/Sounds/solve clicked sound.mp3";
+        Media sound = new Media(new File(musicFile).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+        /*stopThemeSong = false;
+        musicThread = new Thread(()->{
+            try {
+                while(!stopThemeSong) {
+                    String musicFile = "resources/Sounds/solve clicked sound.mp3";
+                    Media sound = new Media(new File(musicFile).toURI().toString());
+                    themeMediaPlayer = new MediaPlayer(sound);
+                    themeMediaPlayer.play();
+
+                    int time = 219000;
+                    Thread.sleep(time);
+                }
+            }
+            catch (Exception e) {System.out.println(e); }
+        });
+        musicThread.start();*/
     }
 
     private void showAlert(String alertMessage) {
@@ -185,9 +243,33 @@ public class MyViewController implements Observer, IView {
             stage.setTitle("Settings");
             FXMLLoader fxmlLoader = new FXMLLoader();
             Parent root = fxmlLoader.load(getClass().getResource("SettingsScene.fxml").openStream());
-            Scene scene = new Scene(root, 700, 400);
+            Scene scene = new Scene(root, 600, 400);
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
+            stage.show();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void closeScene(ActionEvent actionEvent) {
+        Stage currentStage = (Stage) btn_solveMaze.getScene().getWindow();
+        currentStage.close();
+    }
+
+    public void openStartScene(ActionEvent actionEvent) {
+        Stage currentStage = (Stage) btn_solveMaze.getScene().getWindow();
+        currentStage.close();
+
+        try {
+            Stage stage = new Stage();
+            stage.setTitle("A-maze-ing");
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Parent root = fxmlLoader.load(getClass().getResource("StartScene.fxml").openStream());
+            StartSceneController startSceneController = fxmlLoader.getController();
+            Scene scene = new Scene(root, 407, 400);
+            startSceneController.setResizeEvent(scene);
+            stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
             System.out.println(e.getMessage());
