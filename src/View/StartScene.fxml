@@ -16,12 +16,12 @@
       <ImageView fx:id="imageView_background" fitHeight="400.0" fitWidth="407.0" pickOnBounds="true" preserveRatio="false">
 
       </ImageView>
-      <Button fx:id="btn_start" layoutX="134.0" layoutY="38.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="133.0" text="Start" minWidth="-Infinity" minHeight="-Infinity">
+      <Button fx:id="btn_start" onAction="#openViewScene" layoutX="134.0" layoutY="38.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="133.0" text="Start" minWidth="-Infinity" minHeight="-Infinity">
          <font>
             <Font name="Jokerman" size="20.0" />
          </font>
       </Button>
-      <ImageView onMouseExited="#mouseExitImage" onMouseEntered="#mouseEnteredImage" fx:id="imageView_settings" fitHeight="39.0" fitWidth="39.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView onMouseClicked="#openSettingsScene" onMouseExited="#mouseExitImage" onMouseEntered="#mouseEnteredImage" fx:id="imageView_settings" fitHeight="39.0" fitWidth="39.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
 
       </ImageView>
 

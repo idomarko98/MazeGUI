@@ -1,19 +1,26 @@
 package View;
 
+import Model.MyModel;
+import ViewModel.MyViewModel;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -107,5 +114,45 @@ public class StartSceneController implements Initializable{
 
     public void mouseExitImage(MouseEvent mouseEvent) {
         stopSettings = true;
+    }
+
+    public void openSettingsScene() {
+        try {
+            Stage stage = new Stage();
+            stage.setTitle("Settings");
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Parent root = fxmlLoader.load(getClass().getResource("SettingsScene.fxml").openStream());
+            Scene scene = new Scene(root, 700, 400);
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
+            stage.show();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void openViewScene(ActionEvent actionEvent) {
+        try {
+            Stage stage = new Stage();
+            stage.setTitle("Amaze maze");
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Parent root = fxmlLoader.load(getClass().getResource("View.fxml").openStream());
+            Scene scene = new Scene(root, 700, 400);
+            scene.getStylesheets().add(getClass().getResource("ViewStyle.css").toExternalForm());
+            stage.setScene(scene);
+
+            MyModel model = new MyModel();
+            model.startServers();
+            MyViewModel viewModel = new MyViewModel(model);
+            model.addObserver(viewModel);
+            MyViewController view = fxmlLoader.getController();
+            view.setViewModel(viewModel);
+            viewModel.addObserver(view);
+
+            stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
+            stage.show();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
