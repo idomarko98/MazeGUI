@@ -1,10 +1,17 @@
 package View;
 
+import Server.Server;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 
 import java.io.FileInputStream;
@@ -26,7 +33,14 @@ public class SettingsSceneController implements Initializable {
     public javafx.scene.control.RadioButton RadioButtonBreadthFirstSearch;
     public javafx.scene.control.RadioButton RadioButtonDepthFirstSearch;
     public javafx.scene.control.RadioButton RadioButtonBestFirstSearch;
+    private ToggleGroup generatingAlgorithmGroup;
+    private ToggleGroup solvingAlgorithmGroup;
     public javafx.scene.layout.AnchorPane anchorPane;
+
+    public SettingsSceneController(){
+        generatingAlgorithmGroup = new ToggleGroup();
+        solvingAlgorithmGroup = new ToggleGroup();
+    }
 
     public void setResizeEvent(Scene scene) {
         long width = 0;
@@ -36,6 +50,7 @@ public class SettingsSceneController implements Initializable {
             public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
                 //System.out.println("Width: " + newSceneWidth);
                 //btn_start.setLayoutX(anchorPane.getWidth()/3);
+
             }
         });
         scene.heightProperty().addListener(new ChangeListener<Number>() {
@@ -55,6 +70,23 @@ public class SettingsSceneController implements Initializable {
             imageViewMario.setImage(image);
             imageViewMario.fitHeightProperty().bind(anchorPane.heightProperty().divide(1.8));
             imageViewMario.fitWidthProperty().bind(anchorPane.widthProperty().divide(1.5));
+            imageViewMario.xProperty().bind(anchorPane.widthProperty().divide(20));
+            imageViewMario.yProperty().bind(anchorPane.heightProperty().divide(20));
+
+            RadioButtonBestAlgorithm.setToggleGroup(generatingAlgorithmGroup);
+            RadioButtonBestAlgorithm.setUserData("MyMazeGenerator");
+            RadioButtonSimpleAlgorithm.setToggleGroup(generatingAlgorithmGroup);
+            RadioButtonSimpleAlgorithm.setUserData("SimpleMazeGenerator");
+            RadioButtonBestAlgorithm.setSelected(true);
+
+            RadioButtonBreadthFirstSearch.setToggleGroup(solvingAlgorithmGroup);
+            RadioButtonBreadthFirstSearch.setUserData("BreadthFirstSearch");
+            RadioButtonDepthFirstSearch.setToggleGroup(solvingAlgorithmGroup);
+            RadioButtonDepthFirstSearch.setUserData("DepthFirstSearch");
+            RadioButtonBestFirstSearch.setToggleGroup(solvingAlgorithmGroup);
+            RadioButtonBestFirstSearch.setUserData("BestFirstSearch");
+            RadioButtonBreadthFirstSearch.setSelected(true);
+
             //imageViewMario.layoutXProperty().bind(anchorPane.widthProperty().divide(2));
             //imageViewMario.layoutYProperty().bind(anchorPane.heightProperty().divide(8));
 
@@ -79,5 +111,48 @@ public class SettingsSceneController implements Initializable {
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void SaveSettingsClicked(ActionEvent actionEvent) {
+        String selectedGeneratingAlgorithm = generatingAlgorithmGroup.getSelectedToggle().getUserData().toString();
+        String selectedSolvingAlgorithm = solvingAlgorithmGroup.getSelectedToggle().getUserData().toString();
+        String amountOfThreadsWanted = textFieldNumOfThreads.getText();
+        boolean validText = true;
+        int numOfThreads = 4;
+        try {
+            numOfThreads = Integer.parseInt(amountOfThreadsWanted);
+            if(numOfThreads < 1 || numOfThreads > 20) {
+                validText = false;
+                showAlert("Amount of threads must be minimum 1 and maximum 20");
+            }
+        }
+        catch (Exception e){
+            validText = false;
+            showAlert("Amount of threads must be an Integer");
+        }
+
+        if(validText){
+            Server.Configurations.setProp(numOfThreads, selectedGeneratingAlgorithm, selectedSolvingAlgorithm);
+            showAlert("Settings has been changed successfully :)");
+        }
+    }
+
+    private void showAlert(String alertMessage) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText(alertMessage);
+        alert.show();
+    }
+
+    public void EnterPressed(KeyEvent keyEvent) {
+        if(keyEvent.getCode().equals(KeyCode.ENTER)){
+            SaveSettingsClicked(new ActionEvent());
+        }
+        else if(keyEvent.getCode().equals(KeyCode.ESCAPE)){
+            CancelSettingsClicked(new ActionEvent());
+        }
+    }
+
+    public void CancelSettingsClicked(ActionEvent actionEvent) {
+
     }
 }

@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane fx:controller="View.SettingsSceneController" fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane onKeyPressed="#EnterPressed" fx:controller="View.SettingsSceneController" fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label fx:id="labelSettings" layoutX="14.0" layoutY="14.0" text="Settings">
          <font>
@@ -47,12 +47,12 @@
          </font>
       </Label>
       <TextField fx:id="textFieldNumOfThreads" layoutX="16.0" layoutY="296.0" promptText="Enter Number" />
-      <Button fx:id="ButtonSaveSettings" layoutX="88.0" layoutY="345.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="101.0" text="Save Settings">
+      <Button onAction="#SaveSettingsClicked" fx:id="ButtonSaveSettings" layoutX="88.0" layoutY="345.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="101.0" text="Save Settings">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button fx:id="ButtonCancel" layoutX="18.0" layoutY="345.0" mnemonicParsing="false" style="-fx-background-color: Red;" text="Cancel" textFill="WHITE">
+      <Button onAction="#CancelSettingsClicked" fx:id="ButtonCancel" layoutX="18.0" layoutY="345.0" mnemonicParsing="false" style="-fx-background-color: Red;" text="Cancel" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
