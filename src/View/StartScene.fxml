@@ -11,7 +11,7 @@
 <?import View.MyImageContainer?>
 <?import com.sun.javafx.scene.control.skin.DoubleField?>
 <?import javafx.scene.control.TextField?>
-<AnchorPane fx:id="anchorPane" fx:controller="View.StartSceneController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="407.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="anchorPane" fx:controller="View.StartSceneController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="407.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fx:id="imageView_background" fitHeight="400.0" fitWidth="407.0" pickOnBounds="true" preserveRatio="false">
 
