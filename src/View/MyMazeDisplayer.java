@@ -78,7 +78,7 @@ public class MyMazeDisplayer extends Canvas {
             try {
                 //Image wallImage = new Image(new FileInputStream(ImageFileNameWall.get()));
                 //Image characterImage = new Image(new FileInputStream(ImageFileNameCharacter.get()));
-                Image hi = new Image(new FileInputStream("C:\\Users\\Ido\\Desktop\\shit.png"));
+                Image hi = new Image(new FileInputStream("C:\\Users\\Ido\\Desktop\\assets\\mario_small01.png"));
                 Image ch = new Image(new FileInputStream("C:\\Users\\Ido\\Desktop\\rot.png"));
                 Image shmelen = new Image(new FileInputStream("C:\\Users\\Ido\\Desktop\\shmelen.png"));
 
