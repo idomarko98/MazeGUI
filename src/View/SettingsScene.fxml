@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Light.Distant?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" text="Settings">
+         <font>
+            <Font name="System Bold" size="29.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="67.0" text="Generatring Algorithm:">
+         <effect>
+            <Lighting diffuseConstant="1.37">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant />
+               </light>
+            </Lighting>
+         </effect>
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <RadioButton layoutX="14.0" layoutY="95.0" mnemonicParsing="false" selected="true" text="Best Generator" />
+      <RadioButton layoutX="14.0" layoutY="119.0" mnemonicParsing="false" text="Simple Generator" />
+      <Label layoutX="17.0" layoutY="158.0" text="Solving Algorithm:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <RadioButton layoutX="14.0" layoutY="184.0" mnemonicParsing="false" selected="true" text="Breadth First Search" />
+      <RadioButton layoutX="14.0" layoutY="210.0" mnemonicParsing="false" text="Depth First Search" />
+      <RadioButton layoutX="14.0" layoutY="235.0" mnemonicParsing="false" text="Best First Search" />
+      <Label layoutX="17.0" layoutY="270.0" text="Amount of Threads in Server:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TextField layoutX="16.0" layoutY="296.0" promptText="Enter Number" />
+      <Button layoutX="88.0" layoutY="345.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="101.0" text="Save Settings">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <Button layoutX="18.0" layoutY="345.0" mnemonicParsing="false" style="-fx-background-color: Red;" text="Cancel" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <ImageView fitHeight="233.0" fitWidth="391.0" layoutX="189.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../Desktop/maze%20images/mario%20settings%20image.jpg" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
