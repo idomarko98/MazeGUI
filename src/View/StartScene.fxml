@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<?import View.StartSceneController?>
+<?import View.MyImageContainer?>
+<?import com.sun.javafx.scene.control.skin.DoubleField?>
+<?import javafx.scene.control.TextField?>
+<AnchorPane fx:id="anchorPane" fx:controller="View.StartSceneController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="407.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fx:id="imageView_background" fitHeight="400.0" fitWidth="407.0" pickOnBounds="true" preserveRatio="false">
+
+      </ImageView>
+      <Button fx:id="btn_start" layoutX="134.0" layoutY="38.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="133.0" text="Start" minWidth="-Infinity" minHeight="-Infinity">
+         <font>
+            <Font name="Jokerman" size="20.0" />
+         </font>
+      </Button>
+      <ImageView onMouseExited="#mouseExitImage" onMouseEntered="#mouseEnteredImage" fx:id="imageView_settings" fitHeight="39.0" fitWidth="39.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+
+      </ImageView>
+
+   </children>
+</AnchorPane>
