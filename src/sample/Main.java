@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -12,22 +13,21 @@ import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 import sun.audio.ContinuousAudioDataStream;
 
+
+import javax.swing.*;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.time.Clock;
-import java.time.Instant;
-import java.time.ZoneId;
+import java.io.FileNotFoundException;
 
 public class Main extends Application {
-
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("../View/MyView.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
-
+        playImage(primaryStage);
         //playMusic1();
         //playMusicInLoop();
         playMusicInThread();
@@ -103,6 +103,14 @@ public class Main extends Application {
                 catch (Exception e) {System.out.println(e); }
             }
         }.start();
+    }
+
+    private void playImage(Stage stage){
+        try {
+            Image icon = Image.impl_fromPlatformImage(new ImageIcon(String.valueOf(new FileInputStream("resources/images/Coins/try.jpg"))).getImage());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

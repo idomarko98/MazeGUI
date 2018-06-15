@@ -114,8 +114,8 @@ public class MyMazeDisplayer extends Canvas {
                         //changeCoin();
                         MazeState mazeState = (MazeState) state;
                         Position position = mazeState.getPositionOfMazeState();
-                        //changeCoin(position.getColumnIndex(),position.getRowIndex(), cellWidth, cellHeight, gc);
-                        gc.drawImage(coin, position.getColumnIndex() * cellWidth, position.getRowIndex() * cellHeight, cellHeight, cellWidth );
+                        changeCoin(position.getColumnIndex(),position.getRowIndex(), cellWidth, cellHeight, gc);
+                        //gc.drawImage(coin, position.getColumnIndex() * cellWidth, position.getRowIndex() * cellHeight, cellHeight, cellWidth );
                     }
                 }
 
@@ -182,6 +182,11 @@ public class MyMazeDisplayer extends Canvas {
             }
         });
         threadcoin.start();
+        try {
+            threadcoin.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     //endregion
 
