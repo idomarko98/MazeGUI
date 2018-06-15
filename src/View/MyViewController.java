@@ -49,6 +49,7 @@ public class MyViewController implements Observer, IView {
     public javafx.scene.control.Label lbl_columnsNum;
     public javafx.scene.control.Button btn_generateMaze;
     public javafx.scene.control.Button btn_solveMaze;
+    public javafx.scene.control.MenuItem menu_item_save;
 
     public void setViewModel(MyViewModel viewModel) {
         this.viewModel = viewModel;
@@ -118,6 +119,7 @@ public class MyViewController implements Observer, IView {
             themeMediaPlayer.stop();
             stopThemeSong = true;
         }
+        menu_item_save.setDisable(false);
         playTheme();
     }
 
