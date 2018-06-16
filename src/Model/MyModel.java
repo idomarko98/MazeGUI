@@ -13,6 +13,7 @@ import algorithms.search.AState;
 import algorithms.search.Solution;
 import com.sun.org.apache.xpath.internal.operations.String;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;
@@ -168,7 +169,39 @@ public class MyModel extends Observable implements IModel {
         */
     }
 
+    public void moveCharacter(MouseEvent movement, double startX, double startY){
+        if(movement.getY() > startY){
+            if(maze.getAtIndex(characterPositionRow - 1, characterPositionColumn) != 0)
+                notifyNotAbleToMove(movement);
+            else
+                setCharacterPosition(new Position(characterPositionRow - 1, characterPositionColumn));
+        }
+        else if(movement.getY() < startY){
+            if(maze.getAtIndex(characterPositionRow - 1, characterPositionColumn) != 0)
+                notifyNotAbleToMove(movement);
+            else
+                setCharacterPosition(new Position(characterPositionRow - 1, characterPositionColumn));
+        }
+        else if(movement.getX() > startX){
+            if(maze.getAtIndex(characterPositionRow, characterPositionColumn + 1) != 0)
+                notifyNotAbleToMove(movement);
+            else
+                setCharacterPosition(new Position(characterPositionRow, characterPositionColumn + 1));
+        }
+        else if(movement.getX() < startX){
+            if(maze.getAtIndex(characterPositionRow, characterPositionColumn - 1) != 0)
+                notifyNotAbleToMove(movement);
+            else
+                setCharacterPosition(new Position(characterPositionRow, characterPositionColumn - 1));
+        }
+    }
+
     private void notifyNotAbleToMove(KeyCode movement) {
+        setChanged();
+        notifyObservers(movement);
+    }
+
+    private void notifyNotAbleToMove(MouseEvent movement) {
         setChanged();
         notifyObservers(movement);
     }

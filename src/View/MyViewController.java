@@ -18,6 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -40,6 +41,8 @@ public class MyViewController implements Observer, IView {
     private Thread musicThread;
     private MediaPlayer themeMediaPlayer;
     private volatile boolean stopThemeSong = false;
+    private double startX; // for mouse
+    private double startY; //for mouse
     //private volatile boolean stopLostSound = false;
 
     public MyMazeDisplayer mazeDisplayer;
@@ -185,6 +188,15 @@ public class MyViewController implements Observer, IView {
         keyEvent.consume();
     }
 
+    public void MouseReleased(MouseEvent mouseEvent) {
+        viewModel.moveCharacter(mouseEvent, startX, startY);
+        mouseEvent.consume();
+    }
+
+    public void MousePressed(MouseEvent mouseEvent) {
+        startX = mouseEvent.getX();
+        startY = mouseEvent.getY();
+    }
 
     //region String Property for Binding
     public StringProperty characterPositionRow = new SimpleStringProperty();

@@ -15,6 +15,7 @@ import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 
 import java.awt.*;
 import java.util.Observable;
@@ -56,7 +57,7 @@ public class MyViewModel extends Observable implements Observer{
             if(arg instanceof Solution){
 
             }
-            if(arg instanceof KeyCode){
+            if(arg instanceof KeyCode || arg instanceof MouseEvent){
                 MyMazeDisplayer.shrink = true;
                 //startSound();
             }
@@ -75,6 +76,10 @@ public class MyViewModel extends Observable implements Observer{
 
     public void moveCharacter(KeyCode movement){
         model.moveCharacter(movement);
+    }
+
+    public void moveCharacter(MouseEvent movement, double startX, double startY){
+        model.moveCharacter(movement,startX, startY);
     }
 
     public static void setConfigurations(int numberOfThreads, String generatingAlgorithmName, String solvingAlgorithmName){
