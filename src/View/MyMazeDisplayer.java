@@ -77,10 +77,35 @@ public class MyMazeDisplayer extends Canvas {
             boolean firstImage = true;
             while(true){
                 try{
-                    if(firstImage)
-                        character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
-                    else
-                        character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right02.png"));
+                    if(!shrink) {
+                        if(movingRight) {
+                            if (firstImage)
+                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
+                            else
+                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right02.png"));
+                        }
+                        else{
+                            if (firstImage)
+                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left01.png"));
+                            else
+                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left02.png"));
+                        }
+                    }
+                    else{
+                        if(movingRight) {
+                            if (firstImage)
+                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_small_right01.png"));
+                            else
+                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_small_right02.png"));
+                        }
+                        else{
+                            if (firstImage)
+                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_small_left01.png"));
+                            else
+                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_small_left02.png"));
+                        }
+                    }
+
                     firstImage = !firstImage;
                     synchronized (lock) {
                         drawCharacter();
@@ -150,6 +175,9 @@ public class MyMazeDisplayer extends Canvas {
             double cellHeight = canvasHeight / maze.getRowSize();
             double cellWidth = canvasWidth / maze.getColumnSize();
             */
+            shrink = false;
+            movingRight = true;
+            
             canvasHeight = getHeight();
             canvasWidth = getWidth();
             cellHeight = canvasHeight / /*maze.length*/ maze.getRowSize();
