@@ -97,13 +97,12 @@
                                 <MenuItem onAction="#openSettingsScene" mnemonicParsing="false" text="Properties"/>
                             </items>
                     </Menu>
-                        <Menu mnemonicParsing="false" text="Help">
-                        </Menu>
-
-                        <Menu mnemonicParsing="false" text="About">
-
-                        </Menu>
-                        <Menu mnemonicParsing="false" onAction="#closeScene" text="Ext">
+                        <Menu mnemonicParsing="false" text="More">
+                            <items>
+                                <MenuItem onAction="#openHelpScene" mnemonicParsing="false" text="Help"/>
+                                <MenuItem onAction="#openAboutScene" mnemonicParsing="false" text="About"/>
+                                <MenuItem onAction="#closeScene" mnemonicParsing="false" text="Exit"/>
+                            </items>
                         </Menu>
                     </menus>
                 </MenuBar>

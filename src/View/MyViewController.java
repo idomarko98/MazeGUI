@@ -278,6 +278,24 @@ public class MyViewController implements Observer, IView {
         }
     }
 
+    public void openAboutScene(ActionEvent actionEvent) {
+        try {
+            Stage stage = new Stage();
+            stage.setTitle("About");
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Parent root = fxmlLoader.load(getClass().getResource("AboutScene.fxml").openStream());
+            Scene scene = new Scene(root, 500, 400);
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
+            stage.show();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void openHelpScene(ActionEvent actionEvent) {
+    }
+
     //endregion
 
 }
