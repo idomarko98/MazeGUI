@@ -177,7 +177,7 @@ public class MyMazeDisplayer extends Canvas {
             */
             shrink = false;
             movingRight = true;
-            
+
             canvasHeight = getHeight();
             canvasWidth = getWidth();
             cellHeight = canvasHeight / /*maze.length*/ maze.getRowSize();
