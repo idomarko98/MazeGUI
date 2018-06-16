@@ -30,6 +30,8 @@ public class MyMazeDisplayer extends Canvas {
     private int characterPositionRow = 1;
     private int characterPositionColumn = 1;
     private boolean showSolution = false;
+    public static boolean movingRight = true;
+    public static boolean shrink = false;
 
     private Image coin;
 
@@ -122,7 +124,27 @@ public class MyMazeDisplayer extends Canvas {
                 //Draw Character
                 //gc.setFill(Color.RED);
                 //gc.fillOval(characterPositionColumn * cellHeight, characterPositionRow * cellWidth, cellHeight, cellWidth);
+                if(!movingRight && !shrink)
+                    character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left01.png"));
+                if(!movingRight && shrink){
+                    //shrinkAnimtionLeft(character, gc, cellHeight, cellWidth);
+                }
+                if(movingRight && shrink){}
+                    //shrinkAnimationRight(character);
+                gc.drawImage(/*characterImage*/character, characterPositionColumn * cellHeight, characterPositionRow * cellWidth, cellHeight, cellWidth);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 
+    private void shrinkAnimtionLeft(Image character, GraphicsContext gc, double cellHeight, double cellWidth) {
+        for(int i =0; i < 8; i++){
+            try {
+                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left01.png"));
+                gc.drawImage(/*characterImage*/character, characterPositionColumn * cellHeight, characterPositionRow * cellWidth, cellHeight, cellWidth);
+                Thread.sleep(100);
+                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_small_left01.png"));
                 gc.drawImage(/*characterImage*/character, characterPositionColumn * cellHeight, characterPositionRow * cellWidth, cellHeight, cellWidth);
             } catch (Exception e) {
                 System.out.println(e.getMessage());

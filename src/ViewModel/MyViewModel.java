@@ -3,6 +3,7 @@ package ViewModel;
 
 import Model.IModel;
 import Model.MyModel;
+import View.MyMazeDisplayer;
 import algorithms.mazeGenerators.IMazeGenerator;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
@@ -11,6 +12,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyCode;
 
@@ -41,6 +43,11 @@ public class MyViewModel extends Observable implements Observer{
 
             }
             if(arg instanceof Position){
+                Position pos = (Position)arg;
+                if(pos.getColumnIndex() > getCharacterPositionColumn())
+                    MyMazeDisplayer.movingRight = true;
+                else if(pos.getColumnIndex() < getCharacterPositionColumn())
+                    MyMazeDisplayer.movingRight = false;
                 characterPositionRowIndex = model.getCharacterPositionRow();
                 characterPositionRow.set(characterPositionRowIndex + "");
                 characterPositionColumnIndex = model.getCharacterPositionColumn();
@@ -50,6 +57,7 @@ public class MyViewModel extends Observable implements Observer{
 
             }
             if(arg instanceof KeyCode){
+                MyMazeDisplayer.shrink = true;
                 //startSound();
             }
             setChanged();
