@@ -43,11 +43,16 @@ public class MyMazeDisplayer extends Canvas {
     private Image wall;
     private Image path;
     private Image flag;
+    private Image character;
+
+    private Object lock;
 
     private Image coin;
 
     public MyMazeDisplayer() {
         try {
+            lock = new Object();
+
             previousCharacterPositionRow = 1;
             previousCharacterPositionColumn = 1;
             characterPositionRow = 1;
@@ -59,9 +64,35 @@ public class MyMazeDisplayer extends Canvas {
             wall = new Image(new FileInputStream("resources/images/Displayed On Maze/brick.png"));
             path = new Image(new FileInputStream("resources/images/Displayed On Maze/path.png"));
             flag = new Image(new FileInputStream("resources/images/Displayed On Maze/flag.png"));
+            character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
+            ChangingCharactersImage();
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private void ChangingCharactersImage(){
+        Thread thread = new Thread(()->{
+            boolean firstImage = true;
+            while(true){
+                try{
+                    if(firstImage)
+                        character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
+                    else
+                        character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right02.png"));
+                    firstImage = !firstImage;
+                    synchronized (lock) {
+                        drawCharacter();
+                    }
+                    Thread.sleep(200);
+                }
+                catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
+        thread.start();
     }
 
     public void setMaze(Maze maze) {
@@ -83,13 +114,16 @@ public class MyMazeDisplayer extends Canvas {
     }
 
     public void setCharacterPosition(int row, int column) {
-        previousCharacterPositionColumn = characterPositionColumn;
-        previousCharacterPositionRow = characterPositionRow;
+        synchronized (lock) {
+            previousCharacterPositionColumn = characterPositionColumn;
+            previousCharacterPositionRow = characterPositionRow;
 
-        characterPositionRow = row;
-        characterPositionColumn = column;
-        //redraw();
-        drawCharacter();
+            characterPositionRow = row;
+            characterPositionColumn = column;
+            //redraw();
+            removePreviousCharacter();
+            drawCharacter();
+        }
     }
 
     public int getCharacterPositionRow() {
@@ -154,17 +188,22 @@ public class MyMazeDisplayer extends Canvas {
             double cellWidth = canvasWidth / maze.getColumnSize();
             */
             try {
-                Image character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
+                //Image character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
 
                 //gc.clearRect(0, 0, getWidth(), getHeight());
                 //gc.clearRect(previousCharacterPositionColumn, previousCharacterPositionRow, cellWidth, cellHeight);
-                removePreviousCharacter();
+
+
+                //removePreviousCharacter();
+
+
                 //GraphicsContext gc = getGraphicsContext2D();
                 //Draw Character
                 //gc.setFill(Color.RED);
                 //gc.fillOval(characterPositionColumn * cellHeight, characterPositionRow * cellWidth, cellHeight, cellWidth);
-                if (!movingRight && !shrink)
-                    character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left01.png"));
+                if (!movingRight && !shrink) {
+                    //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left01.png"));
+                }
                 if (!movingRight && shrink) {
                     //shrinkAnimtionLeft(character, gc, cellHeight, cellWidth);
                 }
