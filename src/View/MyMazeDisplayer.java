@@ -46,12 +46,14 @@ public class MyMazeDisplayer extends Canvas {
     private Image character;
 
     private Object lock;
+    private Object lock2;
 
     private Image coin;
 
     public MyMazeDisplayer() {
         try {
             lock = new Object();
+            lock2 = new Object();
 
             previousCharacterPositionRow = 1;
             previousCharacterPositionColumn = 1;
@@ -66,6 +68,7 @@ public class MyMazeDisplayer extends Canvas {
             flag = new Image(new FileInputStream("resources/images/Displayed On Maze/flag.png"));
             character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
             ChangingCharactersImage();
+            ChangingCoinImage();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -120,6 +123,49 @@ public class MyMazeDisplayer extends Canvas {
         thread.start();
     }
 
+    private void ChangingCoinImage(){
+        Thread thread = new Thread(()->{
+            int imageNumber = 0;
+            while(true){
+                try{
+                    if(imageNumber == 0)
+                        coin = new Image(new FileInputStream("resources/images/Coins/coin01.png"));
+                    else if(imageNumber == 1)
+                        coin = new Image(new FileInputStream("resources/images/Coins/coin02.png"));
+                    else if(imageNumber == 2)
+                        coin = new Image(new FileInputStream("resources/images/Coins/coin03.png"));
+                    else
+                        coin = new Image(new FileInputStream("resources/images/Coins/coin04.png"));
+
+                    imageNumber = (imageNumber + 1) % 4;
+
+                    synchronized (lock) {
+                        drawCoins();
+                    }
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
+        thread.start();
+    }
+
+    private void drawCoins() {
+        if(maze != null && showSolution){
+            //Draw Solution
+            for (AState state : solution.getSolutionPath()) {
+                //changeCoin();
+                MazeState mazeState = (MazeState) state;
+                Position position = mazeState.getPositionOfMazeState();
+                //changeCoin(position.getColumnIndex(), position.getRowIndex(), cellWidth, cellHeight, gc);
+                //gc.drawImage(coin, position.getColumnIndex() * cellWidth, position.getRowIndex() * cellHeight, cellHeight, cellWidth );
+                gc.drawImage(coin, position.getColumnIndex() * cellWidth,position.getRowIndex() * cellHeight, cellHeight, cellWidth );
+            }
+        }
+    }
+
     public void setMaze(Maze maze) {
         this.maze = maze;
         //redraw();
@@ -130,7 +176,7 @@ public class MyMazeDisplayer extends Canvas {
         this.solution = solution;
         showSolution = true;
         //redraw();
-        drawSolution();
+        //drawSolution();
     }
 
     public void removeSolution(){
