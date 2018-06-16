@@ -26,21 +26,43 @@ import java.util.ResourceBundle;
 public class MyMazeDisplayer extends Canvas {
 
     private Maze maze;
-    private int previousCharacterPositionRow = 1;
-    private int previousCharacterPositionColumn = 1;
+    private int previousCharacterPositionRow;
+    private int previousCharacterPositionColumn;
     private Solution solution;
-    private int characterPositionRow = 1;
-    private int characterPositionColumn = 1;
-    private boolean showSolution = false;
-    public static boolean movingRight = true;
-    public static boolean shrink = false;
-    private GraphicsContext gc = getGraphicsContext2D();
+    private int characterPositionRow;
+    private int characterPositionColumn;
+    private boolean showSolution;
+    public static boolean movingRight;
+    public static boolean shrink;
+    private GraphicsContext gc;
     private double canvasHeight;
     private double canvasWidth;
     private double cellHeight;
     private double cellWidth;
 
+    private Image wall;
+    private Image path;
+    private Image flag;
+
     private Image coin;
+
+    public MyMazeDisplayer() {
+        try {
+            previousCharacterPositionRow = 1;
+            previousCharacterPositionColumn = 1;
+            characterPositionRow = 1;
+            characterPositionColumn = 1;
+            showSolution = false;
+            movingRight = true;
+            shrink = false;
+            gc = getGraphicsContext2D();
+            wall = new Image(new FileInputStream("resources/images/Displayed On Maze/brick.png"));
+            path = new Image(new FileInputStream("resources/images/Displayed On Maze/path.png"));
+            flag = new Image(new FileInputStream("resources/images/Displayed On Maze/flag.png"));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public void setMaze(Maze maze) {
         this.maze = maze;
@@ -102,9 +124,11 @@ public class MyMazeDisplayer extends Canvas {
             try {
                 //Image wallImage = new Image(new FileInputStream(ImageFileNameWall.get()));
                 //Image characterImage = new Image(new FileInputStream(ImageFileNameCharacter.get()));
+                /*
                 Image wall = new Image(new FileInputStream("resources/images/Displayed On Maze/brick.png"));
                 Image path = new Image(new FileInputStream("resources/images/Displayed On Maze/path.png"));
                 Image flag = new Image(new FileInputStream("resources/images/Displayed On Maze/flag.png"));
+                */
 
                 //GraphicsContext gc = getGraphicsContext2D();
                 gc.clearRect(0, 0, getWidth(), getHeight());
@@ -112,15 +136,7 @@ public class MyMazeDisplayer extends Canvas {
                 //Draw Maze
                 for (int i = 0; i < /*maze.length*/maze.getRowSize(); i++) {
                     for (int j = 0; j < /*maze[i].length*/maze.getColumnSize(); j++) {
-                        if (maze.getAtIndex(i,j) == 1) {
-                            gc.drawImage(wall, j * cellWidth, i * cellHeight, cellHeight, cellWidth);
-                        }
-                        else if(i == maze.getGoalPosition().getRowIndex() && j == maze.getGoalPosition().getColumnIndex()){
-                            gc.drawImage(flag, j * cellWidth, i * cellHeight, cellHeight, cellWidth);
-                        }
-                        else{
-                            gc.drawImage(path, j * cellWidth, i * cellHeight, cellHeight, cellWidth);
-                        }
+                        drawSpot(i, j);
                     }
                 }
             } catch (Exception e) {
@@ -163,21 +179,24 @@ public class MyMazeDisplayer extends Canvas {
     }
 
     private void removePreviousCharacter() {
-        if (maze != null) {
-            try {
-                Image wall = new Image(new FileInputStream("resources/images/Displayed On Maze/brick.png"));
-                Image path = new Image(new FileInputStream("resources/images/Displayed On Maze/path.png"));
-                Image flag = new Image(new FileInputStream("resources/images/Displayed On Maze/flag.png"));
+        drawSpot(previousCharacterPositionRow, previousCharacterPositionColumn);
+    }
 
-                if (maze.getAtIndex(previousCharacterPositionRow, previousCharacterPositionColumn) == 1) {
-                    gc.drawImage(wall, previousCharacterPositionColumn * cellWidth, previousCharacterPositionRow * cellHeight, cellHeight, cellWidth);
-                } else if (previousCharacterPositionRow == maze.getGoalPosition().getRowIndex() && previousCharacterPositionColumn == maze.getGoalPosition().getColumnIndex()) {
-                    gc.drawImage(flag, previousCharacterPositionColumn * cellWidth, previousCharacterPositionRow * cellHeight, cellHeight, cellWidth);
-                } else {
-                    gc.drawImage(path, previousCharacterPositionColumn * cellWidth, previousCharacterPositionRow * cellHeight, cellHeight, cellWidth);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+    private void drawSpot(int row, int column) {
+        if (maze != null) {
+
+            /*
+            Image wall = new Image(new FileInputStream("resources/images/Displayed On Maze/brick.png"));
+            Image path = new Image(new FileInputStream("resources/images/Displayed On Maze/path.png"));
+            Image flag = new Image(new FileInputStream("resources/images/Displayed On Maze/flag.png"));
+            */
+
+            if (maze.getAtIndex(row, column) == 1) {
+                gc.drawImage(wall, column * cellWidth, row * cellHeight, cellHeight, cellWidth);
+            } else if (row == maze.getGoalPosition().getRowIndex() && column == maze.getGoalPosition().getColumnIndex()) {
+                gc.drawImage(flag, column * cellWidth, row * cellHeight, cellHeight, cellWidth);
+            } else {
+                gc.drawImage(path, column * cellWidth, row * cellHeight, cellHeight, cellWidth);
             }
         }
     }
@@ -186,7 +205,7 @@ public class MyMazeDisplayer extends Canvas {
         if (maze != null) {
             double canvasHeight = getHeight();
             double canvasWidth = getWidth();
-            double cellHeight = canvasHeight / /*maze.length*/maze.getRowSize();
+            double cellHeight = canvasHeight / /*maze.length*/ maze.getRowSize();
             double cellWidth = canvasWidth / /*maze[0].length*/maze.getColumnSize();
             try {
                 coin = new Image(new FileInputStream("resources/images/coins/try.gif"));
