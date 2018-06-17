@@ -4,7 +4,6 @@ import ViewModel.MyViewModel;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.AState;
-import algorithms.search.Solution;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -12,24 +11,16 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.input.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.*;
 
 public class MyViewController implements Observer, IView {
@@ -41,6 +32,10 @@ public class MyViewController implements Observer, IView {
     private volatile boolean stopThemeSong = false;
     private double startX; // for mouse
     private double startY; //for mouse
+
+    private volatile double dragAndCtrlPreviousX = 0;
+    private volatile double dragAndCtrlPreviousY = 0;
+    private volatile boolean startedDragging = false;
     //private volatile boolean stopLostSound = false;
 
     public MyMazeDisplayer mazeDisplayer;
@@ -208,7 +203,11 @@ public class MyViewController implements Observer, IView {
 
     public void MouseReleased(MouseEvent mouseEvent) {
         viewModel.moveCharacter(mouseEvent, startX, startY);
+
+        DragDone(mouseEvent);
         mouseEvent.consume();
+
+
     }
 
     public void MousePressed(MouseEvent mouseEvent) {
@@ -337,6 +336,39 @@ public class MyViewController implements Observer, IView {
             System.out.println(e.getMessage());
         }
     }
+
+    public void MouseScrolled(ScrollEvent scrollEvent) {
+        //Check if need to zoom
+        if(scrollEvent.isControlDown()){
+            if(scrollEvent.getDeltaY() < 0)
+                mazeDisplayer.zoomOut();
+            else
+                mazeDisplayer.zoomIn();
+        }
+    }
+
+    public void MouseDragged(MouseEvent mouseEvent) {
+        if(mouseEvent.isControlDown()){
+            if(startedDragging)
+                mazeDisplayer.changeCursorsPlace((mouseEvent.getX() - dragAndCtrlPreviousX) / dragAndCtrlPreviousX, (mouseEvent.getY() - dragAndCtrlPreviousY) / dragAndCtrlPreviousY);
+        }
+    }
+
+    public void DragDetected(MouseEvent mouseEvent) {
+        if(mouseEvent.isControlDown()){
+            dragAndCtrlPreviousX = mouseEvent.getX();
+            dragAndCtrlPreviousY = mouseEvent.getY();
+            startedDragging = true;
+            //System.out.println("Drag Detected");
+        }
+    }
+
+    public void DragDone(MouseEvent mouseEvent) {
+        startedDragging = false;
+        dragAndCtrlPreviousX = mouseEvent.getX();
+        dragAndCtrlPreviousY = mouseEvent.getY();
+    }
+
 
     //endregion
 

@@ -5,6 +5,7 @@ import algorithms.mazeGenerators.Position;
 import algorithms.search.AState;
 import algorithms.search.MazeState;
 import algorithms.search.Solution;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.EventHandler;
@@ -39,16 +40,23 @@ public class MyMazeDisplayer extends Canvas {
     private GraphicsContext gc;
     private double canvasHeight;
     private double canvasWidth;
+    private double zoomFactor;
+    private double zoomDelta;
     private double cellHeight;
     private double cellWidth;
+    private double startX;
+    private double startY;
 
     private Image wall;
     private Image path;
     private Image flag;
     private Image character;
 
-    private Object lock;
-    private Object lock2;
+    private volatile Object lock;
+    private volatile Object lock2;
+    private volatile Object cellHeightAndWidthLock;
+    private volatile Object zoomFactorLock;
+    private volatile Object startPositionLock;
 
     private Image coin;
 
@@ -56,6 +64,14 @@ public class MyMazeDisplayer extends Canvas {
         try {
             lock = new Object();
             lock2 = new Object();
+            cellHeightAndWidthLock = new Object();
+            zoomFactorLock = new Object();
+            startPositionLock = new Object();
+
+            zoomFactor = 0;
+            zoomDelta = 5;
+            startX = 0;
+            startY = 0;
 
             previousCharacterPositionRow = 1;
             previousCharacterPositionColumn = 1;
@@ -64,7 +80,13 @@ public class MyMazeDisplayer extends Canvas {
             showSolution = false;
             movingRight = true;
             shrink = false;
-            gc = getGraphicsContext2D();
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    gc = getGraphicsContext2D();
+                }
+            });
+
             wall = new Image(new FileInputStream("resources/images/Displayed On Maze/brick.png"));
             path = new Image(new FileInputStream("resources/images/Displayed On Maze/path.png"));
             flag = new Image(new FileInputStream("resources/images/Displayed On Maze/flag.png"));
@@ -163,7 +185,14 @@ public class MyMazeDisplayer extends Canvas {
                 Position position = mazeState.getPositionOfMazeState();
                 //changeCoin(position.getColumnIndex(), position.getRowIndex(), cellWidth, cellHeight, gc);
                 //gc.drawImage(coin, position.getColumnIndex() * cellWidth, position.getRowIndex() * cellHeight, cellHeight, cellWidth );
-                gc.drawImage(coin, position.getColumnIndex() * cellWidth,position.getRowIndex() * cellHeight, cellHeight, cellWidth );
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        synchronized (cellHeightAndWidthLock) {
+                            gc.drawImage(coin, startX + position.getColumnIndex() * cellWidth, startY + position.getRowIndex() * cellHeight, cellHeight, cellWidth);
+                        }
+                    }
+                });
             }
         }
     }
@@ -176,7 +205,15 @@ public class MyMazeDisplayer extends Canvas {
     }
 
     public void setMaze(Maze maze) {
+        synchronized (cellHeightAndWidthLock) {
+            if (canvasHeight == 0 && canvasWidth == 0) {
+                canvasHeight = getHeight();
+                canvasWidth = getWidth();
+            }
+        }
         this.maze = maze;
+        shrink = false;
+        movingRight = true;
         //redraw();
         drawMaze();
     }
@@ -213,6 +250,28 @@ public class MyMazeDisplayer extends Canvas {
         }
     }
 
+    public void zoomIn(){
+        synchronized (zoomFactorLock){
+            zoomFactor += zoomDelta;
+        }
+        drawMaze();
+        //setCellHeightAndWidth();
+    }
+
+    public void zoomOut(){
+        synchronized (zoomFactorLock){
+            zoomFactor -= zoomDelta;
+        }
+        drawMaze();
+        //setCellHeightAndWidth();
+    }
+
+    public void changeCursorsPlace(double xTo, double yTo){
+        startX += xTo;
+        startY += yTo;
+        drawMaze();
+    }
+
     public int getCharacterPositionRow() {
         return characterPositionRow;
     }
@@ -229,6 +288,17 @@ public class MyMazeDisplayer extends Canvas {
     }
     */
 
+    private void setCellHeightAndWidth(){
+        synchronized (cellHeightAndWidthLock) {
+            if (maze != null) {
+                synchronized (zoomFactorLock) {
+                    cellHeight = (canvasHeight + zoomFactor) / /*maze.length*/ maze.getRowSize();
+                    cellWidth = (canvasWidth + zoomFactor) / /*maze[0].length*/ maze.getColumnSize();
+                }
+            }
+        }
+    }
+
     private void drawMaze(){
         if (maze != null) {
             /*
@@ -237,13 +307,8 @@ public class MyMazeDisplayer extends Canvas {
             double cellHeight = canvasHeight / maze.getRowSize();
             double cellWidth = canvasWidth / maze.getColumnSize();
             */
-            shrink = false;
-            movingRight = true;
 
-            canvasHeight = getHeight();
-            canvasWidth = getWidth();
-            cellHeight = canvasHeight / /*maze.length*/ maze.getRowSize();
-            cellWidth = canvasWidth / /*maze[0].length*/ maze.getColumnSize();
+            setCellHeightAndWidth();
 
             try {
                 //Image wallImage = new Image(new FileInputStream(ImageFileNameWall.get()));
@@ -255,7 +320,13 @@ public class MyMazeDisplayer extends Canvas {
                 */
 
                 //GraphicsContext gc = getGraphicsContext2D();
-                gc.clearRect(0, 0, getWidth(), getHeight());
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        gc.clearRect(0, 0, getWidth(), getHeight());
+                    }
+                });
+
 
                 //Draw Maze
                 for (int i = 0; i < /*maze.length*/maze.getRowSize(); i++) {
@@ -300,7 +371,15 @@ public class MyMazeDisplayer extends Canvas {
                 if (movingRight && shrink) {
                 }
                 //shrinkAnimationRight(character);
-                gc.drawImage(/*characterImage*/character, characterPositionColumn * cellHeight, characterPositionRow * cellWidth, cellHeight, cellWidth);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        synchronized (cellHeightAndWidthLock) {
+                            gc.drawImage(/*characterImage*/character, startX + characterPositionColumn * cellHeight, startY + characterPositionRow * cellWidth, cellHeight, cellWidth);
+                        }
+                    }
+                });
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -319,23 +398,30 @@ public class MyMazeDisplayer extends Canvas {
             Image path = new Image(new FileInputStream("resources/images/Displayed On Maze/path.png"));
             Image flag = new Image(new FileInputStream("resources/images/Displayed On Maze/flag.png"));
             */
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (cellHeightAndWidthLock) {
+                        if (maze.getAtIndex(row, column) == 1) {
+                            gc.drawImage(wall, startX + column * cellWidth, startY + row * cellHeight, cellHeight, cellWidth);
+                        } else if (row == maze.getGoalPosition().getRowIndex() && column == maze.getGoalPosition().getColumnIndex()) {
+                            gc.drawImage(flag, startX + column * cellWidth, startY + row * cellHeight, cellHeight, cellWidth);
+                        } else {
+                            gc.drawImage(path, startX + column * cellWidth, startY + row * cellHeight, cellHeight, cellWidth);
+                        }
+                    }
+                }
+            });
 
-            if (maze.getAtIndex(row, column) == 1) {
-                gc.drawImage(wall, column * cellWidth, row * cellHeight, cellHeight, cellWidth);
-            } else if (row == maze.getGoalPosition().getRowIndex() && column == maze.getGoalPosition().getColumnIndex()) {
-                gc.drawImage(flag, column * cellWidth, row * cellHeight, cellHeight, cellWidth);
-            } else {
-                gc.drawImage(path, column * cellWidth, row * cellHeight, cellHeight, cellWidth);
-            }
         }
     }
-
+    /*
     private void drawSolution() {
         if (maze != null) {
             double canvasHeight = getHeight();
             double canvasWidth = getWidth();
-            double cellHeight = canvasHeight / /*maze.length*/ maze.getRowSize();
-            double cellWidth = canvasWidth / /*maze[0].length*/maze.getColumnSize();
+            double cellHeight = canvasHeight / maze.getRowSize();
+            double cellWidth = canvasWidth / maze.getColumnSize();
             try {
                 coin = new Image(new FileInputStream("resources/images/coins/try.gif"));
 
@@ -355,6 +441,7 @@ public class MyMazeDisplayer extends Canvas {
             }
         }
     }
+    */
 
     /*
     public void redraw() {
@@ -422,21 +509,22 @@ public class MyMazeDisplayer extends Canvas {
         }
     }
     */
+    /*
 
     private void shrinkAnimtionLeft(Image character, GraphicsContext gc, double cellHeight, double cellWidth) {
         for(int i =0; i < 8; i++){
             try {
                 character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left01.png"));
-                gc.drawImage(/*characterImage*/character, characterPositionColumn * cellHeight, characterPositionRow * cellWidth, cellHeight, cellWidth);
+                gc.drawImage(character, characterPositionColumn * cellHeight, characterPositionRow * cellWidth, cellHeight, cellWidth);
                 Thread.sleep(100);
                 character = new Image(new FileInputStream("resources/images/Mario Characters/mario_small_left01.png"));
-                gc.drawImage(/*characterImage*/character, characterPositionColumn * cellHeight, characterPositionRow * cellWidth, cellHeight, cellWidth);
+                gc.drawImage(character, characterPositionColumn * cellHeight, characterPositionRow * cellWidth, cellHeight, cellWidth);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
     }
-
+    */
     //region Properties
     private StringProperty ImageFileNameWall = new SimpleStringProperty();
     private StringProperty ImageFileNameCharacter = new SimpleStringProperty();
@@ -457,6 +545,7 @@ public class MyMazeDisplayer extends Canvas {
         this.ImageFileNameCharacter.set(imageFileNameCharacter);
     }
 
+    /*
     public void changeCoin(int col, int row, double cellWidth, double cellHeight, GraphicsContext gc){
         Thread threadcoin = new Thread(()->{
             int count = 0;
@@ -495,6 +584,7 @@ public class MyMazeDisplayer extends Canvas {
             e.printStackTrace();
         }
     }
+    */
     //endregion
 
 }
