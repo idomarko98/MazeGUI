@@ -22,6 +22,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
+<?import javafx.scene.control.CheckMenuItem?>
 <BorderPane onScroll="#MouseScrolled" onDragDetected="#DragDetected" onMouseDragged="#MouseDragged" onMousePressed="#MousePressed" onMouseReleased="#MouseReleased" onKeyPressed="#KeyPressed" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="View.MyViewController">
     <left>
@@ -95,6 +96,7 @@
                         <Menu mnemonicParsing="false" text="Options">
                             <items>
                                 <MenuItem onAction="#openSettingsScene" mnemonicParsing="false" text="Properties"/>
+                                <CheckMenuItem text="Mind the Blind"></CheckMenuItem>
                             </items>
                     </Menu>
                         <Menu mnemonicParsing="false" text="More">

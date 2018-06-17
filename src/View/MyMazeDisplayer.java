@@ -19,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 import javax.swing.*;
+import javax.swing.text.View;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -35,6 +36,7 @@ public class MyMazeDisplayer extends Canvas {
     private int characterPositionRow;
     private int characterPositionColumn;
     private boolean showSolution;
+    private boolean mazeIsSolved;
     public static boolean movingRight;
     public static boolean shrink;
     private GraphicsContext gc;
@@ -62,6 +64,7 @@ public class MyMazeDisplayer extends Canvas {
 
     public MyMazeDisplayer() {
         try {
+            mazeIsSolved = false;
             lock = new Object();
             lock2 = new Object();
             cellHeightAndWidthLock = new Object();
@@ -87,10 +90,14 @@ public class MyMazeDisplayer extends Canvas {
                 }
             });
 
-            wall = new Image(new FileInputStream("resources/images/Displayed On Maze/brick.png"));
-            path = new Image(new FileInputStream("resources/images/Displayed On Maze/path.png"));
-            flag = new Image(new FileInputStream("resources/images/Displayed On Maze/flag.png"));
-            character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
+            //wall = new Image(new FileInputStream("resources/images/Displayed On Maze/brick.png"));
+            wall = new Image(this.getClass().getResourceAsStream("/images/Displayed On Maze/brick.png"));
+            //path = new Image(new FileInputStream("resources/images/Displayed On Maze/path.png"));
+            path = new Image(this.getClass().getResourceAsStream("/images/Displayed On Maze/path.png"));
+            //flag = new Image(new FileInputStream("resources/images/Displayed On Maze/flag.png"));
+            flag = new Image(this.getClass().getResourceAsStream("/images/Displayed On Maze/flag.png"));
+            //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
+            character = new Image(this.getClass().getResourceAsStream("/images/Mario Characters/mario_big_right01.png"));
             ChangingCharactersImage();
             ChangingCoinImage();
 
@@ -107,29 +114,37 @@ public class MyMazeDisplayer extends Canvas {
                     if(!shrink) {
                         if(movingRight) {
                             if (firstImage)
-                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
+                                //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
+                                character = new Image(this.getClass().getResourceAsStream("/images/Mario Characters/mario_big_right01.png"));
                             else
-                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right02.png"));
+                                //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right02.png"));
+                                character = new Image(this.getClass().getResourceAsStream("/images/Mario Characters/mario_big_right02.png"));
                         }
                         else{
                             if (firstImage)
-                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left01.png"));
+                                //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left01.png"));
+                                character = new Image(this.getClass().getResourceAsStream("/images/Mario Characters/mario_big_left01.png"));
                             else
-                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left02.png"));
+                                //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left02.png"));
+                                character = new Image(this.getClass().getResourceAsStream("/images/Mario Characters/mario_big_left02.png"));
                         }
                     }
                     else{
                         if(movingRight) {
                             if (firstImage)
-                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_small_right01.png"));
+                                //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_small_right01.png"));
+                                character = new Image(this.getClass().getResourceAsStream("/images/Mario Characters/mario_small_right01.png"));
                             else
-                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_small_right02.png"));
+                                //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_small_right02.png"));
+                                character = new Image(this.getClass().getResourceAsStream("/images/Mario Characters/mario_small_right02.png"));
                         }
                         else{
                             if (firstImage)
-                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_small_left01.png"));
+                                //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_small_left01.png"));
+                                character = new Image(this.getClass().getResourceAsStream("/images/Mario Characters/mario_small_left01.png"));
                             else
-                                character = new Image(new FileInputStream("resources/images/Mario Characters/mario_small_left02.png"));
+                                //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_small_left02.png"));
+                                character = new Image(this.getClass().getResourceAsStream("/images/Mario Characters/mario_small_left02.png"));
                         }
                     }
 
@@ -153,13 +168,17 @@ public class MyMazeDisplayer extends Canvas {
             while(true){
                 try{
                     if(imageNumber == 0)
-                        coin = new Image(new FileInputStream("resources/images/Coins/coin01.png"));
+                        //coin = new Image(new FileInputStream("resources/images/Coins/coin01.png"));
+                        coin = new Image(this.getClass().getResourceAsStream("/images/Coins/coin01.png"));
                     else if(imageNumber == 1)
-                        coin = new Image(new FileInputStream("resources/images/Coins/coin02.png"));
+                        //coin = new Image(new FileInputStream("resources/images/Coins/coin02.png"));
+                        coin = new Image(this.getClass().getResourceAsStream("/images/Coins/coin02.png"));
                     else if(imageNumber == 2)
-                        coin = new Image(new FileInputStream("resources/images/Coins/coin03.png"));
+                        //coin = new Image(new FileInputStream("resources/images/Coins/coin03.png"));
+                        coin = new Image(this.getClass().getResourceAsStream("/images/Coins/coin03.png"));
                     else
-                        coin = new Image(new FileInputStream("resources/images/Coins/coin04.png"));
+                        //coin = new Image(new FileInputStream("resources/images/Coins/coin04.png"));
+                        coin = new Image(this.getClass().getResourceAsStream("/images/Coins/coin04.png"));
 
                     imageNumber = (imageNumber + 1) % 4;
 
@@ -189,7 +208,8 @@ public class MyMazeDisplayer extends Canvas {
                     @Override
                     public void run() {
                         synchronized (cellHeightAndWidthLock) {
-                            gc.drawImage(coin, startX + position.getColumnIndex() * cellWidth, startY + position.getRowIndex() * cellHeight, cellHeight, cellWidth);
+                            if(position.getColumnIndex() != maze.getGoalPosition().getColumnIndex() || position.getRowIndex() != maze.getGoalPosition().getRowIndex())
+                                gc.drawImage(coin, startX + position.getColumnIndex() * cellWidth, startY + position.getRowIndex() * cellHeight, cellHeight, cellWidth);
                         }
                     }
                 });
@@ -217,6 +237,7 @@ public class MyMazeDisplayer extends Canvas {
         //redraw();
         drawMaze();
     }
+
     /*
 
     public void setSolution(Solution solution){
@@ -375,7 +396,15 @@ public class MyMazeDisplayer extends Canvas {
                     @Override
                     public void run() {
                         synchronized (cellHeightAndWidthLock) {
-                            gc.drawImage(/*characterImage*/character, startX + characterPositionColumn * cellHeight, startY + characterPositionRow * cellWidth, cellHeight, cellWidth);
+                            if(maze.getGoalPosition().getColumnIndex() != characterPositionColumn || maze.getGoalPosition().getRowIndex() != characterPositionRow)
+                                gc.drawImage(/*characterImage*/character, startX + characterPositionColumn * cellHeight, startY + characterPositionRow * cellWidth, cellHeight, cellWidth);
+                            else {
+                                if(!mazeIsSolved){
+                                    setMazeIsSolved(true);
+                                    //openSolveScene();
+                                }
+                            }
+
                         }
                     }
                 });
@@ -385,6 +414,7 @@ public class MyMazeDisplayer extends Canvas {
             }
         }
     }
+
 
     private void removePreviousCharacter() {
         drawSpot(previousCharacterPositionRow, previousCharacterPositionColumn);
@@ -414,6 +444,10 @@ public class MyMazeDisplayer extends Canvas {
             });
 
         }
+    }
+
+    public void setMazeIsSolved(boolean bool){
+        mazeIsSolved = bool;
     }
     /*
     private void drawSolution() {

@@ -25,15 +25,24 @@ public class HelpTwoSceneController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try{
-            Image imageMushroom = new Image(new FileInputStream("resources/images/Displayed On Maze/mushroom.png"));
+            //Image imageMushroom = new Image(new FileInputStream("resources/images/Displayed On Maze/mushroom.png"));
+            Image imageMushroom = new Image(this.getClass().getResourceAsStream("/images/Displayed On Maze/mushroom.png"));
             img_mushroom.setImage(imageMushroom);
-            Image imageGomba = new Image(new FileInputStream("resources/images/Enemy Characters/gomba_left_01.png"));
+
+            //Image imageGomba = new Image(new FileInputStream("resources/images/Enemy Characters/gomba_left_01.png"));
+            Image imageGomba = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/gomba_left_01.png"));
             img_gomba.setImage(imageGomba);
-            Image imageTortuga = new Image(new FileInputStream("resources/images/Enemy Characters/tortuga_right_01.png"));
+
+            //Image imageTortuga = new Image(new FileInputStream("resources/images/Enemy Characters/tortuga_right_01.png"));
+            Image imageTortuga = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/tortuga_right_01.png"));
             img_tortuga.setImage(imageTortuga);
-            Image imageFlag = new Image(new FileInputStream("resources/images/Displayed On Maze/flag.png"));
+
+            //Image imageFlag = new Image(new FileInputStream("resources/images/Displayed On Maze/flag.png"));
+            Image imageFlag = new Image(this.getClass().getResourceAsStream("/images/Displayed On Maze/flag.png"));
             img_flag.setImage(imageFlag);
-            Image imageMarioHelp = new Image(new FileInputStream("resources/images/mario question mark help.png"));
+
+            //Image imageMarioHelp = new Image(new FileInputStream("resources/images/mario question mark help.png"));
+            Image imageMarioHelp = new Image(this.getClass().getResourceAsStream("/images/mario question mark help.png"));
             img_mario_help.setImage(imageMarioHelp);
         }
         catch (Exception e){

@@ -21,7 +21,8 @@ public class HelpOneSceneController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try{
-            Image image = new Image(new FileInputStream("resources/images/help sign.png"));
+            //Image image = new Image(new FileInputStream("resources/images/help sign.png"));
+            Image image = new Image(this.getClass().getResourceAsStream("/images/help sign.png"));
             image_view_help_sign.setImage(image);
         }
         catch (Exception e){

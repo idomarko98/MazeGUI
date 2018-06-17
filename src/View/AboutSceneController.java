@@ -14,7 +14,8 @@ public class AboutSceneController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try{
-            Image image = new Image(new FileInputStream("resources/images/about Image.jpg"));
+            //Image image = new Image(new FileInputStream("resources/images/about Image.jpg"));
+            Image image = new Image(this.getClass().getResourceAsStream("/images/about Image.jpg"));
             image_view_about.setImage(image);
         }
         catch (Exception e){

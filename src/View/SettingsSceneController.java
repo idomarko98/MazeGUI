@@ -72,7 +72,8 @@ public class SettingsSceneController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            Image image = new Image(new FileInputStream("resources/images/mario settings image.jpg"));
+            //Image image = new Image(new FileInputStream("resources/images/mario settings image.jpg"));
+            Image image = new Image(this.getClass().getResourceAsStream("/images/mario settings image.jpg"));
 
             imageViewMario.setImage(image);
             imageViewMario.fitHeightProperty().bind(anchorPane.heightProperty().divide(1.8));
@@ -127,7 +128,7 @@ public class SettingsSceneController implements Initializable {
 
             textSize.bind(btn_start.heightProperty().divide(2));
             */
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }

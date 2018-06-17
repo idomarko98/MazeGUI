@@ -2,13 +2,11 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane fx:controller="View.HelpTwoSceneController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.HelpTwoSceneController">
    <children>
       <Label layoutX="11.0" layoutY="6.0" text="Help! (The sequel)">
          <font>
@@ -20,7 +18,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label layoutX="11.0" layoutY="78.0" text="Move Mario using the arrows or the numpad on your keyboard." />
+      <Label layoutX="11.0" layoutY="78.0" text="Move Mario using the arrows keyboard, numpads on keyboard and even your mouse!" />
       <Label layoutX="11.0" layoutY="95.0" text="Avoid different enemies or you will get down sized!" />
       <ImageView fx:id="img_tortuga" fitHeight="17.0" fitWidth="49.0" layoutX="289.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true">
       </ImageView>
@@ -32,20 +30,21 @@
       <Label layoutX="11.0" layoutY="129.0" text="Your goal is to reach the castle and save Peach by all means!" />
       <ImageView fx:id="img_flag" fitHeight="17.0" fitWidth="49.0" layoutX="339.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true">
       </ImageView>
-      <Label layoutX="11.0" layoutY="180.0" text="In our A-maze-ing company, we care about all of our users so in this game there is a very special feature!" />
-      <Label layoutX="11.0" layoutY="163.0" text="Accessible to the blind">
+      <Label layoutX="11.0" layoutY="192.0" text="In our A-maze-ing company, we care about all of our users so in this game there is a very special feature!" />
+      <Label layoutX="11.0" layoutY="176.0" text="Accessible to the blind">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label layoutX="11.0" layoutY="197.0" text="By going to the menu and clicking on &quot;Options&quot; and then clicking &quot;Mind the Blind&quot; you will activate" />
-      <Label layoutX="11.0" layoutY="214.0" text="a game mode in which all possible directions will be read out loud. In this way - everyone can enjoy the game!" />
+      <Label layoutX="11.0" layoutY="209.0" text="By going to the menu and clicking on &quot;Options&quot; and then clicking &quot;Mind the Blind&quot; you will activate" />
+      <Label layoutX="11.0" layoutY="225.0" text="a game mode in which all possible directions will be read out loud. In this way - everyone can enjoy the game!" />
       <ImageView fx:id="img_mario_help" fitHeight="150.0" fitWidth="200.0" layoutX="442.0" layoutY="238.0" pickOnBounds="true" preserveRatio="true">
       </ImageView>
-      <Button  fx:id="btn_help_screen_one" onAction="#openHelpScreenOne" layoutX="14.0" layoutY="293.0" mnemonicParsing="false" text="Take me back to the first Help screen">
+      <Button fx:id="btn_help_screen_one" layoutX="14.0" layoutY="293.0" mnemonicParsing="false" onAction="#openHelpScreenOne" text="Take me back to the first Help screen">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
+      <Label layoutX="11.0" layoutY="146.0" text="You can zoom in/out by pressing ctrl and scrolling with your mouse" />
    </children>
 </AnchorPane>

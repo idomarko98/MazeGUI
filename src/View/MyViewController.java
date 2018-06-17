@@ -89,8 +89,9 @@ public class MyViewController implements Observer, IView {
     }
 
     private void playCoinCollectinSound() {
-        String musicFile = "resources/Sounds/coin collecting.mp3";
-        Media sound = new Media(new File(musicFile).toURI().toString());
+        //String musicFile = "resources/Sounds/coin collecting.mp3";
+        //Media sound = new Media(new File(musicFile).toURI().toString());
+        Media sound = new Media(this.getClass().getResource("/Sounds/coin collecting.mp3").toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.play();
     }
@@ -128,7 +129,12 @@ public class MyViewController implements Observer, IView {
     public void generateMaze() {
         int heigth = Integer.valueOf(txtfld_rowsNum.getText());
         int width = Integer.valueOf(txtfld_columnsNum.getText());
+        if(heigth < 3 || width < 3 ){
+            showAlert("Height and Width must be larger than 3");
+            return;
+        }
         btn_generateMaze.setDisable(true);
+        mazeDisplayer.setMazeIsSolved(false);
         mazeDisplayer.removeSolution();
         viewModel.generateMaze(width, heigth);
         if(musicThread != null && musicThread.isAlive()) {
@@ -144,8 +150,9 @@ public class MyViewController implements Observer, IView {
         musicThread = new Thread(()->{
             try {
                 while(!stopThemeSong) {
-                    String musicFile = "resources/Sounds/theme.mp3";
-                    Media sound = new Media(new File(musicFile).toURI().toString());
+                    //String musicFile = "resources/Sounds/theme.mp3";
+                    Media sound = new Media(this.getClass().getResource("/Sounds/theme.mp3").toString());
+                    //Media sound = new Media(new File(musicFile).toURI().toString());
                     themeMediaPlayer = new MediaPlayer(sound);
                     themeMediaPlayer.play();
 
@@ -168,8 +175,9 @@ public class MyViewController implements Observer, IView {
     }
 
     private void playClickedOnSolveMusic() {
-        String musicFile = "resources/Sounds/solve clicked sound.mp3";
-        Media sound = new Media(new File(musicFile).toURI().toString());
+        //String musicFile = "resources/Sounds/solve clicked sound.mp3";
+        //Media sound = new Media(new File(musicFile).toURI().toString());
+        Media sound = new Media(this.getClass().getResource("/Sounds/solve clicked sound.mp3").toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.play();
         /*stopThemeSong = false;
@@ -274,7 +282,7 @@ public class MyViewController implements Observer, IView {
             stage.setTitle("Settings");
             FXMLLoader fxmlLoader = new FXMLLoader();
             Parent root = fxmlLoader.load(getClass().getResource("SettingsScene.fxml").openStream());
-            Scene scene = new Scene(root, 600, 400);
+            Scene scene = new Scene(root, 614,400);
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
             stage.show();
@@ -286,6 +294,7 @@ public class MyViewController implements Observer, IView {
     public void closeScene(ActionEvent actionEvent) {
         Stage currentStage = (Stage) btn_solveMaze.getScene().getWindow();
         currentStage.close();
+        System.exit(0);
     }
 
     public void openStartScene(ActionEvent actionEvent) {
@@ -369,7 +378,20 @@ public class MyViewController implements Observer, IView {
         dragAndCtrlPreviousY = mouseEvent.getY();
     }
 
-
+    public void openSolvedScene(){
+        try {
+            Stage stage = new Stage();
+            stage.setTitle("Solved!");
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Parent root = fxmlLoader.load(getClass().getResource("SolvedScene.fxml").openStream());
+            Scene scene = new Scene(root, 424, 234);
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
+            stage.show();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
     //endregion
 
 }

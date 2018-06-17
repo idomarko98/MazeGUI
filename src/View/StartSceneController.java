@@ -9,12 +9,15 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -23,10 +26,12 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class StartSceneController implements Initializable{
@@ -66,8 +71,10 @@ public class StartSceneController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            Image backgroundImage = new Image(new FileInputStream("resources/images/logo.jpg"));
-            Image settings = new Image(new FileInputStream("resources/images/settings.jpg"));
+            //Image backgroundImage = new Image(new FileInputStream("resources/images/logo.jpg"));
+            Image backgroundImage = new Image(this.getClass().getResourceAsStream("/images/logo.jpg"));
+            //Image settings = new Image(new FileInputStream("resources/images/settings.jpg"));
+            Image settings = new Image(this.getClass().getResourceAsStream("/images/settings.jpg"));
             imageView_background.setImage(backgroundImage);
             //BackgroundImage background = new BackgroundImage(backgroundImage,BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                     //BackgroundSize.DEFAULT);
@@ -85,7 +92,7 @@ public class StartSceneController implements Initializable{
             //btn_start.setLayoutY(anchorPane.getHeight()/10);
 
             textSize.bind(btn_start.heightProperty().divide(2));
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -95,8 +102,10 @@ public class StartSceneController implements Initializable{
         threadSettings = new Thread(()->{
             try {
                 while(!stopSettings) {
-                    Image settings = new Image(new FileInputStream("resources/images/settings.jpg"));
-                    Image settings2 = new Image(new FileInputStream("resources/images/settings2.jpg"));
+                    //Image settings = new Image(new FileInputStream("resources/images/settings.jpg"));
+                    Image settings = new Image(this.getClass().getResourceAsStream("/images/settings.jpg"));
+                    //Image settings2 = new Image(new FileInputStream("resources/images/settings2.jpg"));
+                    Image settings2 = new Image(this.getClass().getResourceAsStream("/images/settings2.jpg"));
                     if(settingsImageNum == 1) {
                         imageView_settings.setImage(settings2);
                         settingsImageNum = 0;
@@ -125,7 +134,7 @@ public class StartSceneController implements Initializable{
             FXMLLoader fxmlLoader = new FXMLLoader();
             Parent root = fxmlLoader.load(getClass().getResource("SettingsScene.fxml").openStream());
             SettingsSceneController settingsSceneController = fxmlLoader.getController();
-            Scene scene = new Scene(root, 600, 400);
+            Scene scene = new Scene(root, 614, 400);
             settingsSceneController.setResizeEvent(scene);
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
@@ -160,11 +169,29 @@ public class StartSceneController implements Initializable{
             viewModel.addObserver(view);
 
             stage.setResizable(false);
+            SetStageCloseEvent(stage);
             stage.show();
             Stage currentStage = (Stage) btn_start.getScene().getWindow();
             currentStage.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private void SetStageCloseEvent(Stage stage) {
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent windowEvent) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK){
+                    System.exit(0);
+                    // ... user chose OK
+                    // Close program
+                } else {
+                    // ... user chose CANCEL or closed the dialog
+                    windowEvent.consume();
+                }
+            }
+        });
     }
 }
