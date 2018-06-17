@@ -7,6 +7,8 @@ import View.MyMazeDisplayer;
 import algorithms.mazeGenerators.IMazeGenerator;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
+import algorithms.search.AState;
+import algorithms.search.MazeState;
 import algorithms.search.Solution;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -18,6 +20,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -28,10 +31,14 @@ public class MyViewModel extends Observable implements Observer{
     private int characterPositionRowIndex;
     private int characterPositionColumnIndex;
 
+    private ArrayList<AState> solutionPath;
+    private Object solutionPathLock;
+
     public StringProperty characterPositionRow; //For Binding
     public StringProperty characterPositionColumn; //For Binding
 
     public MyViewModel(IModel model){
+        solutionPathLock = new Object();
         this.model = model;
         characterPositionRow = new SimpleStringProperty("1");
         characterPositionColumn = new SimpleStringProperty("1");
@@ -53,9 +60,18 @@ public class MyViewModel extends Observable implements Observer{
                 characterPositionRow.set(characterPositionRowIndex + "");
                 characterPositionColumnIndex = model.getCharacterPositionColumn();
                 characterPositionColumn.set(characterPositionColumnIndex + "");
+
+                synchronized (solutionPathLock) {
+                    if(solutionPath != null)
+                        if (solutionPath.remove(new MazeState(new Position(pos))))
+                            notifySolutionPathChanged();
+                }
+
             }
             if(arg instanceof Solution){
-
+                solutionPath = ((Solution) arg).getSolutionPath();
+                arg = solutionPath;
+                ((ArrayList) arg).remove(new MazeState(new Position(characterPositionRowIndex, characterPositionColumnIndex)));
             }
             if(arg instanceof KeyCode || arg instanceof MouseEvent){
                 MyMazeDisplayer.shrink = true;
@@ -64,6 +80,15 @@ public class MyViewModel extends Observable implements Observer{
             setChanged();
             notifyObservers(arg);
         }
+    }
+
+    private void notifySolutionPathChanged(){
+        setChanged();
+        notifyObservers(solutionPath);
+    }
+
+    public ArrayList<AState> getSolutionPath(){
+        return solutionPath;
     }
 
     public void generateMaze(int width, int height){

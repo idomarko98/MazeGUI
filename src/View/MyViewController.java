@@ -3,6 +3,7 @@ package View;
 import ViewModel.MyViewModel;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
+import algorithms.search.AState;
 import algorithms.search.Solution;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -29,10 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.EventObject;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class MyViewController implements Observer, IView {
 
@@ -70,18 +68,28 @@ public class MyViewController implements Observer, IView {
             if(arg instanceof Maze){
                 updateMaze((Maze)arg);
             }
+            /*
             else if(arg instanceof Solution){
                 updateSolution((Solution)arg);
             }
+            */
             else if(arg instanceof Position){
                 updatePosition((Position)arg);
             }
             else if(arg instanceof KeyCode){
                 //updateNotAbleToMove((KeyCode)arg);
             }
+            else if(arg instanceof ArrayList){
+                updateSolutionPath((ArrayList<AState>) arg);
+            }
             //displayMaze(viewModel.getMaze());
             //btn_generateMaze.setDisable(false);
         }
+    }
+
+    private void updateSolutionPath(ArrayList<AState> arg) {
+        mazeDisplayer.changeSolutionPath(arg);
+        btn_solveMaze.setDisable(false);
     }
 
     private void updatePosition(Position arg) {
@@ -90,11 +98,13 @@ public class MyViewController implements Observer, IView {
         mazeDisplayer.setCharacterPosition(arg.getRowIndex(), arg.getColumnIndex());
     }
 
+    /*
     private void updateSolution(Solution arg) {
         mazeDisplayer.setSolution(arg);
         btn_solveMaze.setDisable(false);
 
     }
+    */
 
     private void updateMaze(Maze arg) {
         displayMaze(arg);
@@ -150,7 +160,7 @@ public class MyViewController implements Observer, IView {
         stopThemeSong = true;
         themeMediaPlayer.stop();
         playClickedOnSolveMusic();
-        btn_solveMaze.setDisable(false);
+        btn_solveMaze.setDisable(true);
         viewModel.solveMaze();
     }
 

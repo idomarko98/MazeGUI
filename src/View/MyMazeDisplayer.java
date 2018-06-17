@@ -21,6 +21,7 @@ import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class MyMazeDisplayer extends Canvas {
@@ -29,6 +30,7 @@ public class MyMazeDisplayer extends Canvas {
     private int previousCharacterPositionRow;
     private int previousCharacterPositionColumn;
     private Solution solution;
+    private ArrayList<AState> solutionPath;
     private int characterPositionRow;
     private int characterPositionColumn;
     private boolean showSolution;
@@ -139,7 +141,7 @@ public class MyMazeDisplayer extends Canvas {
 
                     imageNumber = (imageNumber + 1) % 4;
 
-                    synchronized (lock) {
+                    synchronized (lock2) {
                         drawCoins();
                     }
                     Thread.sleep(100);
@@ -155,7 +157,7 @@ public class MyMazeDisplayer extends Canvas {
     private void drawCoins() {
         if(maze != null && showSolution){
             //Draw Solution
-            for (AState state : solution.getSolutionPath()) {
+            for (AState state : solutionPath) {
                 //changeCoin();
                 MazeState mazeState = (MazeState) state;
                 Position position = mazeState.getPositionOfMazeState();
@@ -166,18 +168,31 @@ public class MyMazeDisplayer extends Canvas {
         }
     }
 
+    public void changeSolutionPath(ArrayList<AState> solutionPath){
+        synchronized (lock2) {
+            this.solutionPath = solutionPath;
+            showSolution = true;
+        }
+    }
+
     public void setMaze(Maze maze) {
         this.maze = maze;
         //redraw();
         drawMaze();
     }
+    /*
 
     public void setSolution(Solution solution){
-        this.solution = solution;
-        showSolution = true;
+        synchronized (lock2) {
+            this.solution = solution;
+            this.solutionPath = this.solution.getSolutionPath();
+            showSolution = true;
+            System.out.println("Oops, how did I get here?");
+        }
         //redraw();
         //drawSolution();
     }
+    */
 
     public void removeSolution(){
         this.solution = null;
@@ -191,6 +206,7 @@ public class MyMazeDisplayer extends Canvas {
 
             characterPositionRow = row;
             characterPositionColumn = column;
+
             //redraw();
             removePreviousCharacter();
             drawCharacter();
