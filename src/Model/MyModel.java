@@ -144,23 +144,78 @@ public class MyModel extends Observable implements IModel {
                 else
                     setCharacterPosition(new Position(characterPositionRow - 1, characterPositionColumn));
                 break;
+            case NUMPAD8:
+                if(maze.getAtIndex(characterPositionRow - 1, characterPositionColumn) != 0)
+                    notifyNotAbleToMove(movement);
+                else
+                    setCharacterPosition(new Position(characterPositionRow - 1, characterPositionColumn));
+                break;
+
             case DOWN:
                 if(maze.getAtIndex(characterPositionRow + 1, characterPositionColumn) != 0)
                     notifyNotAbleToMove(movement);
                 else
                     setCharacterPosition(new Position(characterPositionRow + 1, characterPositionColumn));
                 break;
+            case NUMPAD2:
+                if(maze.getAtIndex(characterPositionRow + 1, characterPositionColumn) != 0)
+                    notifyNotAbleToMove(movement);
+                else
+                    setCharacterPosition(new Position(characterPositionRow + 1, characterPositionColumn));
+                break;
+
             case RIGHT:
                 if(maze.getAtIndex(characterPositionRow, characterPositionColumn + 1) != 0)
                     notifyNotAbleToMove(movement);
                 else
                     setCharacterPosition(new Position(characterPositionRow, characterPositionColumn + 1));
                 break;
+            case NUMPAD6:
+                if(maze.getAtIndex(characterPositionRow, characterPositionColumn + 1) != 0)
+                    notifyNotAbleToMove(movement);
+                else
+                    setCharacterPosition(new Position(characterPositionRow, characterPositionColumn + 1));
+                break;
+
             case LEFT:
                 if(maze.getAtIndex(characterPositionRow, characterPositionColumn - 1) != 0)
                     notifyNotAbleToMove(movement);
                 else
                     setCharacterPosition(new Position(characterPositionRow, characterPositionColumn - 1));
+                break;
+            case NUMPAD4:
+                if(maze.getAtIndex(characterPositionRow, characterPositionColumn - 1) != 0)
+                    notifyNotAbleToMove(movement);
+                else
+                    setCharacterPosition(new Position(characterPositionRow, characterPositionColumn - 1));
+                break;
+
+            case NUMPAD9: //move right up
+                if(maze.getAtIndex(characterPositionRow - 1, characterPositionColumn + 1) != 0)
+                    notifyNotAbleToMove(movement);
+                else
+                    setCharacterPosition(new Position(characterPositionRow - 1, characterPositionColumn + 1));
+                break;
+
+            case NUMPAD7: //move left up
+                if(maze.getAtIndex(characterPositionRow - 1, characterPositionColumn - 1) != 0)
+                    notifyNotAbleToMove(movement);
+                else
+                    setCharacterPosition(new Position(characterPositionRow - 1, characterPositionColumn - 1));
+                break;
+
+            case NUMPAD3: //move right down
+                if(maze.getAtIndex(characterPositionRow + 1, characterPositionColumn + 1) != 0)
+                    notifyNotAbleToMove(movement);
+                else
+                    setCharacterPosition(new Position(characterPositionRow + 1, characterPositionColumn + 1));
+                break;
+
+            case NUMPAD1: //move left down
+                if(maze.getAtIndex(characterPositionRow + 1, characterPositionColumn - 1) != 0)
+                    notifyNotAbleToMove(movement);
+                else
+                    setCharacterPosition(new Position(characterPositionRow + 1, characterPositionColumn - 1));
                 break;
         }
         /*

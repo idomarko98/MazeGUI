@@ -48,6 +48,7 @@ public class Main extends Application {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK){
+                    System.exit(0);
                     // ... user chose OK
                     // Close program
                 } else {
