@@ -378,6 +378,17 @@ public class MyViewController implements Observer, IView {
         dragAndCtrlPreviousY = mouseEvent.getY();
     }
 
+    public void mazeIsSolved(){
+        playSolveMusic();
+        openSolvedScene();
+    }
+
+    private void playSolveMusic() {
+        Media sound = new Media(this.getClass().getResource("/Sounds/win sound.mp3").toString());
+        MediaPlayer player = new MediaPlayer(sound);
+        player.play();
+    }
+
     public void openSolvedScene(){
         try {
             Stage stage = new Stage();
