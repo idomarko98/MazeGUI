@@ -88,8 +88,16 @@ public class MyViewController implements Observer, IView {
     }
 
     private void updateSolutionPath(ArrayList<AState> arg) {
+        playCoinCollectinSound();
         mazeDisplayer.changeSolutionPath(arg);
         btn_solveMaze.setDisable(false);
+    }
+
+    private void playCoinCollectinSound() {
+        String musicFile = "resources/Sounds/coin collecting.mp3";
+        Media sound = new Media(new File(musicFile).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
     }
 
     private void updatePosition(Position arg) {

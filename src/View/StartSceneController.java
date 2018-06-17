@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -20,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
@@ -139,7 +141,13 @@ public class StartSceneController implements Initializable{
             stage.setTitle("Amaze maze");
             FXMLLoader fxmlLoader = new FXMLLoader();
             Parent root = fxmlLoader.load(getClass().getResource("View.fxml").openStream());
-            Scene scene = new Scene(root, 700, 400);
+            Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+            //stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
+            double setX = (primScreenBounds.getWidth() - stage.getWidth());
+            double setY = (primScreenBounds.getHeight() - stage.getHeight());
+            //stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 4);
+            //Scene scene = new Scene(root, 700, 400);
+            Scene scene = new Scene(root, setX, setY);
             scene.getStylesheets().add(getClass().getResource("ViewStyle.css").toExternalForm());
             stage.setScene(scene);
 
@@ -151,7 +159,7 @@ public class StartSceneController implements Initializable{
             view.setViewModel(viewModel);
             viewModel.addObserver(view);
 
-            //stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
+            stage.setResizable(false);
             stage.show();
             Stage currentStage = (Stage) btn_start.getScene().getWindow();
             currentStage.close();
