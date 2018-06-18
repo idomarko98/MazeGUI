@@ -49,7 +49,7 @@ public class MyViewModel extends Observable implements Observer{
     public void update(Observable o, Object arg) {
         if (o==model){
             if(arg instanceof Maze){
-
+                solutionPath = null;
             }
             if(arg instanceof Position){
                 Position pos = (Position)arg;

@@ -381,6 +381,7 @@ public class MyMazeDisplayer extends Canvas {
                 //Draw Character
                 //gc.setFill(Color.RED);
                 //gc.fillOval(characterPositionColumn * cellHeight, characterPositionRow * cellWidth, cellHeight, cellWidth);
+                /*
                 if (!movingRight && !shrink) {
                     //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left01.png"));
                 }
@@ -389,6 +390,7 @@ public class MyMazeDisplayer extends Canvas {
                 }
                 if (movingRight && shrink) {
                 }
+                */
                 //shrinkAnimationRight(character);
                 Platform.runLater(new Runnable() {
                     @Override
