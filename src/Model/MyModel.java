@@ -19,6 +19,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
@@ -35,6 +36,9 @@ public class MyModel extends Observable implements IModel {
     private ExecutorService threadPool = Executors.newCachedThreadPool();
     private Server mazeGeneratorServer, mazeSolverServer;
 
+    private int gombaPositionRow;
+    private int gombaPositionColumn;
+
     public MyModel() {
         //Raise the servers
         maze = null;
@@ -43,6 +47,9 @@ public class MyModel extends Observable implements IModel {
         characterPositionColumn = 1;
         mazeGeneratorServer = new Server(5400, 1000, new ServerStrategyGenerateMaze());
         mazeSolverServer = new Server(5401,1000, new ServerStrategySolveSearchProblem());
+
+        gombaPositionRow = 1;
+        gombaPositionColumn = 1;
     }
 
     public void startServers() {
@@ -90,6 +97,7 @@ public class MyModel extends Observable implements IModel {
                                 //mazeToBeSet.print();
                                 setMaze(mazeToBeSet);
                                 setCharacterPosition(maze.getStartPosition());
+                                setGombaPosition(randomPositionOnMazePath());
                             } catch (Exception e) {
                                 System.out.println(e.getMessage());
                             }
@@ -110,6 +118,24 @@ public class MyModel extends Observable implements IModel {
             setChanged();
             notifyObservers();
         });*/
+    }
+
+    private Position randomPositionOnMazePath() {
+        int resultRow = -1;
+        int resultCol = -1;
+        do{
+            Random r = new Random();
+            int lowRow = 0;
+            int highRow = maze.getRowSize();
+            resultRow = r.nextInt(highRow - lowRow) + lowRow;
+
+            int lowCol = 0;
+            int highCol = maze.getRowSize();
+            resultCol = r.nextInt(highCol - lowCol) + lowCol;
+
+        } while(maze.getAtIndex(resultRow ,resultCol) != 0 && ((resultRow != maze.getStartPosition().getRowIndex()) || (resultCol != maze.getStartPosition().getColumnIndex())));
+
+        return new Position(resultRow, resultCol);
     }
 
     @Override
@@ -319,5 +345,43 @@ public class MyModel extends Observable implements IModel {
         this.mazeSolution = solution;
         setChanged();
         notifyObservers(this.mazeSolution);
+    }
+
+    public void setGombaPosition(Position gombaPosition) {
+       this.gombaPositionRow = gombaPosition.getRowIndex();
+       this.gombaPositionColumn = gombaPosition.getColumnIndex();
+       setChanged();
+       notifyObservers("GombaMoved");
+    }
+
+    private void moveGomba(){
+        Thread moveGomba = new Thread(()->{
+           pickRandomAdjPosition(gombaPositionRow, gombaPositionColumn);
+        });
+    }
+
+    private void pickRandomAdjPosition(int gombaPositionRow, int gombaPositionColumn) {
+        int tempRow = gombaPositionRow;
+        int tempCol = gombaPositionColumn;
+        do{
+            Random r = new Random();
+            int low = 0;
+            int high = 4;
+            int result = r.nextInt(high - low) + low;
+            switch (result) {
+                case 0:
+                    tempRow++;
+                    break;
+                case 1:
+                    tempRow--;
+                    break;
+                case 2:
+                    tempCol++;
+                    break;
+                case 3:
+                    tempCol--;
+                    break;
+            }
+        }while (maze.getAtIndex(tempRow,tempCol) != 0);
     }
 }

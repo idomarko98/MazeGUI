@@ -38,11 +38,17 @@ public class MyViewModel extends Observable implements Observer{
     public StringProperty characterPositionRow; //For Binding
     public StringProperty characterPositionColumn; //For Binding
 
+    public StringProperty gombaPositionRow;
+    public StringProperty gombaPositionColumn;
+
     public MyViewModel(IModel model){
         solutionPathLock = new Object();
         this.model = model;
         characterPositionRow = new SimpleStringProperty("1");
         characterPositionColumn = new SimpleStringProperty("1");
+
+        gombaPositionRow = new SimpleStringProperty("1");
+        gombaPositionColumn = new SimpleStringProperty("1");
     }
 
     @Override
