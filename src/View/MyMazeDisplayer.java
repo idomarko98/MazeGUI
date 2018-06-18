@@ -207,7 +207,7 @@ public class MyMazeDisplayer extends Canvas {
                     public void run() {
                         synchronized (cellHeightAndWidthLock) {
                             if(position.getColumnIndex() != maze.getGoalPosition().getColumnIndex() || position.getRowIndex() != maze.getGoalPosition().getRowIndex())
-                                gc.drawImage(coin, startX + position.getColumnIndex() * cellWidth, startY + position.getRowIndex() * cellHeight, cellHeight, cellWidth);
+                                gc.drawImage(coin, startX + position.getColumnIndex() * cellWidth, startY + position.getRowIndex() * cellHeight, cellWidth, cellHeight);
                         }
                     }
                 });
@@ -394,7 +394,7 @@ public class MyMazeDisplayer extends Canvas {
                     @Override
                     public void run() {
                         synchronized (cellHeightAndWidthLock) {
-                            gc.drawImage(/*characterImage*/character, startX + characterPositionColumn * cellHeight, startY + characterPositionRow * cellWidth, cellHeight, cellWidth);
+                            gc.drawImage(/*characterImage*/character, startX + characterPositionColumn * cellWidth, startY + characterPositionRow * cellHeight, cellWidth, cellHeight);
                         }
                     }
                 });
@@ -423,11 +423,11 @@ public class MyMazeDisplayer extends Canvas {
                 public void run() {
                     synchronized (cellHeightAndWidthLock) {
                         if (maze.getAtIndex(row, column) == 1) {
-                            gc.drawImage(wall, startX + column * cellWidth, startY + row * cellHeight, cellHeight, cellWidth);
+                            gc.drawImage(wall, startX + column * cellWidth, startY + row * cellHeight, cellWidth, cellHeight);
                         } else if (row == maze.getGoalPosition().getRowIndex() && column == maze.getGoalPosition().getColumnIndex()) {
-                            gc.drawImage(flag, startX + column * cellWidth, startY + row * cellHeight, cellHeight, cellWidth);
+                            gc.drawImage(flag, startX + column * cellWidth, startY + row * cellHeight, cellWidth, cellHeight);
                         } else {
-                            gc.drawImage(path, startX + column * cellWidth, startY + row * cellHeight, cellHeight, cellWidth);
+                            gc.drawImage(path, startX + column * cellWidth, startY + row * cellHeight, cellWidth, cellHeight);
                         }
                     }
                 }
