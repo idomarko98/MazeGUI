@@ -4,6 +4,7 @@ import ViewModel.MyViewModel;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.AState;
+import algorithms.search.Solution;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -46,6 +47,7 @@ public class MyViewController implements Observer, IView {
     public javafx.scene.control.Label lbl_columnsNum;
     public javafx.scene.control.Button btn_generateMaze;
     public javafx.scene.control.Button btn_solveMaze;
+    public javafx.scene.control.Button btn_cancel;
     public javafx.scene.control.MenuItem menu_item_save;
 
     public void setViewModel(MyViewModel viewModel) {
@@ -145,6 +147,7 @@ public class MyViewController implements Observer, IView {
             showAlert("Height and Width must be larger than 3");
             return;
         }
+        btn_cancel.setVisible(true);
         btn_generateMaze.setDisable(true);
         mazeDisplayer.removeSolution();
         viewModel.generateMaze(width, heigth);
@@ -445,6 +448,7 @@ public class MyViewController implements Observer, IView {
 
     public void load(ActionEvent actionEvent) {
         try {
+            mazeDisplayer.removeSolution();
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Maze Progress File", "*.mzprg"));
             File file = fileChooser.showOpenDialog(null);
@@ -464,6 +468,11 @@ public class MyViewController implements Observer, IView {
         catch (Exception e){
             showAlert("Could not load file");
         }
+    }
+
+    public void cancelGenerating(ActionEvent actionEvent) {
+        viewModel.stopServers();
+        btn_cancel.setVisible(false);
     }
     //endregion
 
