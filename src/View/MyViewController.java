@@ -304,6 +304,8 @@ public class MyViewController implements Observer, IView {
     public void closeScene(ActionEvent actionEvent) {
         Stage currentStage = (Stage) btn_solveMaze.getScene().getWindow();
         currentStage.close();
+
+        viewModel.stopServers();
         System.exit(0);
     }
 
@@ -394,6 +396,8 @@ public class MyViewController implements Observer, IView {
     }
 
     private void playSolveMusic() {
+        stopThemeSong = true;
+        themeMediaPlayer.stop();
         Media sound = new Media(this.getClass().getResource("/Sounds/win sound.mp3").toString());
         MediaPlayer player = new MediaPlayer(sound);
         player.play();

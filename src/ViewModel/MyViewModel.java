@@ -138,5 +138,9 @@ public class MyViewModel extends Observable implements Observer{
     public int getCharacterPositionColumn() {
         return characterPositionColumnIndex;
     }
+
+    public void stopServers() {
+        model.stopServers();
+    }
 }
 

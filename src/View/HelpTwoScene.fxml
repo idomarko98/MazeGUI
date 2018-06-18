@@ -45,6 +45,6 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Label layoutX="11.0" layoutY="146.0" text="You can zoom in/out by pressing ctrl and scrolling with your mouse" />
+      <Label layoutX="11.0" layoutY="146.0" text="You can zoom in/out by pressing ctrl and scrolling with your mouse (Press ctrl and drag with mouse to move around map)." />
    </children>
 </AnchorPane>

@@ -184,6 +184,7 @@ public class StartSceneController implements Initializable{
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK){
+                    //Exit as needed
                     System.exit(0);
                     // ... user chose OK
                     // Close program

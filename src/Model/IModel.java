@@ -34,4 +34,6 @@ public interface IModel {
     Solution getMazeSolution();
     int getCharacterPositionRow();
     int getCharacterPositionColumn();
+
+    void stopServers();
 }

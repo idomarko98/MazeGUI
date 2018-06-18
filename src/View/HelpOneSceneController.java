@@ -36,7 +36,7 @@ public class HelpOneSceneController implements Initializable {
             stage.setTitle("Help");
             FXMLLoader fxmlLoader = new FXMLLoader();
             Parent root = fxmlLoader.load(getClass().getResource("HelpTwoScene.fxml").openStream());
-            Scene scene = new Scene(root, 600, 400);
+            Scene scene = new Scene(root, 670, 400);
             stage.setScene(scene);
             stage.show();
             Stage currentStage = (Stage) btn_help_screen_two.getScene().getWindow();
