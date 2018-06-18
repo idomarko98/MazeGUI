@@ -13,6 +13,10 @@ public interface IModel {
     void solveMaze();
     void moveCharacter(KeyCode movement);
     void moveCharacter(MouseEvent movement, double startX, double startY);
+    int getGombaPositionRowIndex();
+    int getGombaPositionColumnIndex();
+    int getTortugaPositionRowIndex();
+    int getTortugaPositionColumnIndex();
     static void setConfigurations(int numberOfThreads, String generatingAlgorithmName, String solvingAlgorithmName){
         Server.Configurations.setProp(numberOfThreads, generatingAlgorithmName, solvingAlgorithmName);
     }

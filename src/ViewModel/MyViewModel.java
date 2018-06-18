@@ -38,8 +38,12 @@ public class MyViewModel extends Observable implements Observer{
     public StringProperty characterPositionRow; //For Binding
     public StringProperty characterPositionColumn; //For Binding
 
-    public StringProperty gombaPositionRow;
-    public StringProperty gombaPositionColumn;
+    private int gombaPositionRowIndex;
+    private int gombaPositionColumnIndex;
+
+    private int tortugaPositionRowIndex;
+    private int tortugaPositionColumnIndex;
+
 
     public MyViewModel(IModel model){
         solutionPathLock = new Object();
@@ -47,8 +51,12 @@ public class MyViewModel extends Observable implements Observer{
         characterPositionRow = new SimpleStringProperty("1");
         characterPositionColumn = new SimpleStringProperty("1");
 
-        gombaPositionRow = new SimpleStringProperty("1");
-        gombaPositionColumn = new SimpleStringProperty("1");
+        gombaPositionColumnIndex = 1;
+        gombaPositionRowIndex = 1;
+
+
+        tortugaPositionColumnIndex = 1;
+        tortugaPositionRowIndex = 1;
     }
 
     @Override
@@ -57,7 +65,7 @@ public class MyViewModel extends Observable implements Observer{
             if(arg instanceof Maze){
                 solutionPath = null;
             }
-            if(arg instanceof Position){
+            else if(arg instanceof Position){
                 Position pos = (Position)arg;
                 if(pos.getColumnIndex() > getCharacterPositionColumn())
                     MyMazeDisplayer.movingRight = true;
@@ -75,17 +83,43 @@ public class MyViewModel extends Observable implements Observer{
                 }
 
             }
-            if(arg instanceof Solution){
+            else if(arg instanceof Solution){
                 solutionPath = ((Solution) arg).getSolutionPath();
                 arg = solutionPath;
                 ((ArrayList) arg).remove(new MazeState(new Position(characterPositionRowIndex, characterPositionColumnIndex)));
             }
-            if(arg instanceof KeyCode || arg instanceof MouseEvent){
-                MyMazeDisplayer.shrink = true;
+            else if(arg instanceof KeyCode || arg instanceof MouseEvent){
+                //MyMazeDisplayer.shrink = true;
+
                 //startSound();
             }
-            if(arg instanceof Boolean){
+            else if(arg instanceof Boolean){
                 //
+            }
+            else if(arg instanceof String){
+                if(((String)arg).length() >= 10 && ((String)arg).substring(0,10).equals("GombaMoved")) {
+                    gombaPositionRowIndex = model.getGombaPositionRowIndex();
+                    gombaPositionColumnIndex = model.getGombaPositionColumnIndex();
+                    String side = ((String)arg).substring(10);
+                    if(side.equals("Left"))
+                        MyMazeDisplayer.gombaMovingRight = false;
+                    else if(side.equals("Right"))
+                        MyMazeDisplayer.gombaMovingRight = true;
+
+                }
+                else if(((String)arg).length() >= 10 && ((String)arg).substring(0,12).equals("TortugaMoved")) {
+                    tortugaPositionRowIndex = model.getTortugaPositionRowIndex();
+                    tortugaPositionColumnIndex = model.getTortugaPositionColumnIndex();
+                    String side = ((String)arg).substring(12);
+                    if(side.equals("Left"))
+                        MyMazeDisplayer.tortugaMovingRight = false;
+                    else if(side.equals("Right"))
+                        MyMazeDisplayer.tortugaMovingRight = true;
+                }
+                else if(((String)arg).equals("collide")){
+                    MyMazeDisplayer.shrink = true;
+                    //
+                }
             }
             setChanged();
             notifyObservers(arg);
@@ -143,6 +177,22 @@ public class MyViewModel extends Observable implements Observer{
 
     public int getCharacterPositionColumn() {
         return characterPositionColumnIndex;
+    }
+
+    public int getGombaPositionRowIndex(){
+        return gombaPositionRowIndex;
+    }
+
+    public int getGombaPositionColumnIndex(){
+        return gombaPositionColumnIndex;
+    }
+
+    public int getTortugaPositionRowIndex(){
+        return tortugaPositionRowIndex;
+    }
+
+    public int getTortugaPositionColumnIndex(){
+        return tortugaPositionColumnIndex;
     }
 
     public void stopServers() {

@@ -35,9 +35,15 @@ public class MyMazeDisplayer extends Canvas {
     private ArrayList<AState> solutionPath;
     private int characterPositionRow;
     private int characterPositionColumn;
+    private int gombaPositionRow;
+    private int gombaPositionColumn;
+    private int tortugaPositionRow;
+    private int tortugaPositionColumn;
     private boolean showSolution;
     public static boolean movingRight;
     public static boolean shrink;
+    public static boolean gombaMovingRight;
+    public static boolean tortugaMovingRight;
     private GraphicsContext gc;
     private double canvasHeight;
     private double canvasWidth;
@@ -52,12 +58,16 @@ public class MyMazeDisplayer extends Canvas {
     private Image path;
     private Image flag;
     private Image character;
+    private Image gomba;
+    private Image tortuga;
 
     private volatile Object lock;
     private volatile Object lock2;
     private volatile Object cellHeightAndWidthLock;
     private volatile Object zoomFactorLock;
     private volatile Object startPositionLock;
+    private volatile Object gombaLock;
+    private volatile Object tortugaLock;
 
     private Image coin;
 
@@ -68,6 +78,8 @@ public class MyMazeDisplayer extends Canvas {
             cellHeightAndWidthLock = new Object();
             zoomFactorLock = new Object();
             startPositionLock = new Object();
+            gombaLock = new Object();
+            tortugaLock = new Object();
 
             zoomFactor = 0;
             zoomDelta = 20;
@@ -78,9 +90,15 @@ public class MyMazeDisplayer extends Canvas {
             previousCharacterPositionColumn = 1;
             characterPositionRow = 1;
             characterPositionColumn = 1;
+            gombaPositionRow = 1;
+            gombaPositionColumn = 1;
+            tortugaPositionRow = 1;
+            tortugaPositionColumn = 1;
             showSolution = false;
             movingRight = true;
             shrink = false;
+            gombaMovingRight = true;
+            tortugaMovingRight = true;
             /*
             Platform.runLater(new Runnable() {
                 @Override
@@ -102,12 +120,87 @@ public class MyMazeDisplayer extends Canvas {
             flag = new Image(this.getClass().getResourceAsStream("/images/Displayed On Maze/flag.png"));
             //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
             character = new Image(this.getClass().getResourceAsStream("/images/Mario Characters/mario_big_right01.png"));
+
+            gomba = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/gomba_right_01.png"));
+
+            tortuga = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/tortuga_right_01.png"));
+
             ChangingCharactersImage();
             ChangingCoinImage();
+            ChagingGombaImage();
+            ChagingTortugaImage();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private void ChagingGombaImage() {
+        Thread thread = new Thread(()->{
+            boolean firstImage = true;
+            while(true) {
+                try {
+                    if (gombaMovingRight) {
+                        if (firstImage)
+                            //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
+                            gomba = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/gomba_right_01.png"));
+                        else
+                            //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right02.png"));
+                            gomba = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/gomba_right_02.png"));
+                    } else {
+                        if (firstImage)
+                            //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left01.png"));
+                            gomba = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/gomba_left_01.png"));
+                        else
+                            //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left02.png"));
+                            gomba = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/gomba_left_02.png"));
+                    }
+
+                    firstImage = !firstImage;
+                    synchronized (gombaLock) {
+                        drawGomba();
+                    }
+                    Thread.sleep(200);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
+        thread.start();
+    }
+
+    private void ChagingTortugaImage() {
+        Thread thread = new Thread(()->{
+            boolean firstImage = true;
+            while(true) {
+                try {
+                    if (tortugaMovingRight) {
+                        if (firstImage)
+                            //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
+                            tortuga = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/tortuga_right_01.png"));
+                        else
+                            //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right02.png"));
+                            tortuga = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/tortuga_right_02.png"));
+                    } else {
+                        if (firstImage)
+                            //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left01.png"));
+                            tortuga = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/tortuga_left_01.png"));
+                        else
+                            //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_left02.png"));
+                            tortuga = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/tortuga_left_02.png"));
+                    }
+
+                    firstImage = !firstImage;
+                    synchronized (tortugaLock) {
+                        drawTortuga();
+                    }
+                    Thread.sleep(200);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
+        thread.start();
     }
 
     private void ChangingCharactersImage(){
@@ -253,6 +346,8 @@ public class MyMazeDisplayer extends Canvas {
         this.maze = maze;
         shrink = false;
         movingRight = true;
+        gombaMovingRight = true;
+        tortugaMovingRight = true;
         //redraw();
         drawMaze();
     }
@@ -451,6 +546,37 @@ public class MyMazeDisplayer extends Canvas {
         }
     }
 
+    private void drawGomba() {
+        if (maze != null) {
+            try {
+                try{
+                    synchronized (cellHeightAndWidthLock) {
+                        gc.drawImage(gomba, startX + gombaPositionColumn * cellWidth, startY + gombaPositionRow * cellHeight, cellWidth, cellHeight);
+                    }
+                }
+                catch (Exception e){}
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void drawTortuga() {
+        if (maze != null) {
+            try {
+                try{
+                    synchronized (cellHeightAndWidthLock) {
+                        gc.drawImage(tortuga, startX + tortugaPositionColumn * cellWidth, startY + tortugaPositionRow * cellHeight, cellWidth, cellHeight);
+                    }
+                }
+                catch (Exception e){}
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 
     private void removePreviousCharacter() {
         drawSpot(previousCharacterPositionRow, previousCharacterPositionColumn);
@@ -624,6 +750,26 @@ public class MyMazeDisplayer extends Canvas {
 
     public void setImageFileNameCharacter(String imageFileNameCharacter) {
         this.ImageFileNameCharacter.set(imageFileNameCharacter);
+    }
+
+    public void setGombaPosition(int gombaPositionRowIndex, int gombaPositionColumnIndex) {
+        synchronized (gombaLock) {
+            //redraw();
+            drawSpot(gombaPositionRow, gombaPositionColumn);
+            this.gombaPositionRow = gombaPositionRowIndex;
+            this.gombaPositionColumn = gombaPositionColumnIndex;
+            drawGomba();
+        }
+    }
+
+    public void setTortugaPosition(int tortugaPositionRowIndex, int tortugaPositionColumnIndex) {
+        synchronized (tortugaLock) {
+            //redraw();
+            drawSpot(tortugaPositionRow, tortugaPositionColumn);
+            this.tortugaPositionRow = tortugaPositionRowIndex;
+            this.tortugaPositionColumn = tortugaPositionColumnIndex;
+            drawTortuga();
+        }
     }
 
     /*

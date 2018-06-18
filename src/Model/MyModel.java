@@ -10,8 +10,11 @@ import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.MyMazeGenerator;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.AState;
+import algorithms.search.MazeState;
+import algorithms.search.SearchableMaze;
 import algorithms.search.Solution;
-import com.sun.org.apache.xpath.internal.operations.String;
+//import com.sun.org.apache.xpath.internal.operations.String;
+import javafx.geometry.Pos;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -21,6 +24,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -39,8 +43,18 @@ public class MyModel extends Observable implements IModel {
     private int gombaPositionRow;
     private int gombaPositionColumn;
 
+    private int tortugaPositionRow;
+    private int tortugaPositionColumn;
+
+    private volatile Object gombaLock;
+
+    private volatile Object tortugaLock;
+
     public MyModel() {
         //Raise the servers
+        gombaLock = new Object();
+        tortugaLock = new Object();
+
         maze = null;
         mazeSolution = null;
         characterPositionRow = 1;
@@ -50,6 +64,9 @@ public class MyModel extends Observable implements IModel {
 
         gombaPositionRow = 1;
         gombaPositionColumn = 1;
+
+        tortugaPositionRow = 1;
+        tortugaPositionColumn = 1;
     }
 
     public void startServers() {
@@ -98,6 +115,9 @@ public class MyModel extends Observable implements IModel {
                                 setMaze(mazeToBeSet);
                                 setCharacterPosition(maze.getStartPosition());
                                 setGombaPosition(randomPositionOnMazePath());
+                                setTortugaPosition(randomPositionOnMazePath());
+                                moveGomba();
+                                moveTortuga();
                             } catch (Exception e) {
                                 System.out.println(e.getMessage());
                             }
@@ -254,11 +274,18 @@ public class MyModel extends Observable implements IModel {
             }
             if (characterPositionRow == maze.getGoalPosition().getRowIndex() && characterPositionColumn == maze.getGoalPosition().getColumnIndex())
                 notifySolved(true);
+            if((characterPositionRow == tortugaPositionRow && characterPositionColumn == tortugaPositionColumn) || (characterPositionRow == gombaPositionRow && characterPositionColumn == gombaPositionColumn))
+                notifyCollide("collide");
         }
         /*
         setChanged();
         notifyObservers();
         */
+    }
+
+    private void notifyCollide(String colide) {
+        setChanged();
+        notifyObservers(colide);
     }
 
     private void notifySolved(boolean b) {
@@ -347,41 +374,185 @@ public class MyModel extends Observable implements IModel {
         notifyObservers(this.mazeSolution);
     }
 
+    private String gombaMoveToSide = "";
+
     public void setGombaPosition(Position gombaPosition) {
-       this.gombaPositionRow = gombaPosition.getRowIndex();
-       this.gombaPositionColumn = gombaPosition.getColumnIndex();
-       setChanged();
-       notifyObservers("GombaMoved");
+        synchronized (gombaLock) {
+            this.gombaPositionRow = gombaPosition.getRowIndex();
+            this.gombaPositionColumn = gombaPosition.getColumnIndex();
+        }
+        setChanged();
+        notifyObservers("GombaMoved" + gombaMoveToSide);
     }
 
     private void moveGomba(){
         Thread moveGomba = new Thread(()->{
-           pickRandomAdjPosition(gombaPositionRow, gombaPositionColumn);
+            while (true) {
+                Position moveTo = pickRandomAdjPosition(gombaPositionRow, gombaPositionColumn);
+                setGombaPosition(moveTo);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
         });
+        moveGomba.start();
     }
 
-    private void pickRandomAdjPosition(int gombaPositionRow, int gombaPositionColumn) {
-        int tempRow = gombaPositionRow;
-        int tempCol = gombaPositionColumn;
-        do{
-            Random r = new Random();
-            int low = 0;
-            int high = 4;
-            int result = r.nextInt(high - low) + low;
+    private Position pickRandomAdjPosition(int gombaPositionRow, int gombaPositionColumn) {
+        int prevGombaPositionRow;
+        int prevGombaPositionColumn;
+        synchronized (gombaLock) {
+            prevGombaPositionRow = gombaPositionRow;
+            prevGombaPositionColumn = gombaPositionColumn;
+        }
+        int tempRow = prevGombaPositionRow;
+        int tempCol = prevGombaPositionColumn;
+
+        Position gombaPosition = new Position(tempRow, tempCol);
+        MazeState gombaState = new MazeState(gombaPosition);
+        SearchableMaze searchableMaze = new SearchableMaze(maze);
+        List<AState> stateList = searchableMaze.getAllPossibleStates(gombaState);
+        //do{
+
+        Random r = new Random();
+        int low = 0;
+        int high = stateList.size();
+        int result = r.nextInt(high - low) + low;
+
+        MazeState gombaNextState = (MazeState) stateList.get(result);
+        Position gombaNextPosition = gombaNextState.getPositionOfMazeState();
+
+        tempRow = gombaNextPosition.getRowIndex();
+        tempCol = gombaNextPosition.getColumnIndex();
+
+        if (tempCol < prevGombaPositionColumn)
+            gombaMoveToSide = "Left";
+        else if (tempCol > prevGombaPositionColumn)
+            gombaMoveToSide = "Right";
+        else
+            gombaMoveToSide = "";
+            /*
             switch (result) {
                 case 0:
                     tempRow++;
+                    gombaMoveToSide = "";
                     break;
                 case 1:
                     tempRow--;
+                    gombaMoveToSide = "";
                     break;
                 case 2:
                     tempCol++;
+                    gombaMoveToSide = "Right";
                     break;
                 case 3:
                     tempCol--;
+                    gombaMoveToSide = "Left";
                     break;
             }
-        }while (maze.getAtIndex(tempRow,tempCol) != 0);
+            */
+        //}while (maze.getAtIndex(tempRow,tempCol) != 0);
+        return new Position(tempRow, tempCol);
+    }
+
+    public int getGombaPositionRowIndex(){
+        return gombaPositionRow;
+    }
+
+    public int getGombaPositionColumnIndex(){
+        return gombaPositionColumn;
+    }
+
+    private String tortugaMoveToSide = "";
+
+    public void setTortugaPosition(Position tortugaPosition) {
+        synchronized (tortugaLock) {
+            this.tortugaPositionRow = tortugaPosition.getRowIndex();
+            this.tortugaPositionColumn = tortugaPosition.getColumnIndex();
+        }
+        setChanged();
+        notifyObservers("TortugaMoved" + tortugaMoveToSide);
+    }
+
+    private void moveTortuga(){
+        Thread moveTortuga = new Thread(()->{
+            while (true) {
+                Position moveTo = pickTortugaRandomAdjPosition(tortugaPositionRow, tortugaPositionColumn);
+                setTortugaPosition(moveTo);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
+        moveTortuga.start();
+    }
+
+    private Position pickTortugaRandomAdjPosition(int tortugaPositionRow, int tortugaPositionColumn) {
+        int prevTortugaPositionRow;
+        int prevTortugaPositionColumn;
+        synchronized (tortugaLock) {
+            prevTortugaPositionRow = tortugaPositionRow;
+            prevTortugaPositionColumn = tortugaPositionColumn;
+        }
+        int tempRow = prevTortugaPositionRow;
+        int tempCol = prevTortugaPositionColumn;
+
+        Position tortugaPosition = new Position(tempRow, tempCol);
+        MazeState tortugaState = new MazeState(tortugaPosition);
+        SearchableMaze searchableMaze = new SearchableMaze(maze);
+        List<AState> stateList = searchableMaze.getAllPossibleStates(tortugaState);
+        //do{
+
+        Random r = new Random();
+        int low = 0;
+        int high = stateList.size();
+        int result = r.nextInt(high - low) + low;
+
+        MazeState tortugaNextState = (MazeState) stateList.get(result);
+        Position tortugaNextPosition = tortugaNextState.getPositionOfMazeState();
+
+        tempRow = tortugaNextPosition.getRowIndex();
+        tempCol = tortugaNextPosition.getColumnIndex();
+
+        if (tempCol < prevTortugaPositionColumn)
+           tortugaMoveToSide = "Left";
+        else if (tempCol > prevTortugaPositionColumn)
+            tortugaMoveToSide = "Right";
+        else
+           tortugaMoveToSide = "";
+            /*
+            switch (result) {
+                case 0:
+                    tempRow++;
+                    gombaMoveToSide = "";
+                    break;
+                case 1:
+                    tempRow--;
+                    gombaMoveToSide = "";
+                    break;
+                case 2:
+                    tempCol++;
+                    gombaMoveToSide = "Right";
+                    break;
+                case 3:
+                    tempCol--;
+                    gombaMoveToSide = "Left";
+                    break;
+            }
+            */
+        //}while (maze.getAtIndex(tempRow,tempCol) != 0);
+        return new Position(tempRow, tempCol);
+    }
+
+    public int getTortugaPositionRowIndex(){
+        return tortugaPositionRow;
+    }
+
+    public int getTortugaPositionColumnIndex(){
+        return tortugaPositionColumn;
     }
 }
