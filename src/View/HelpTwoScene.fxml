@@ -18,7 +18,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label layoutX="11.0" layoutY="78.0" text="Move Mario using the arrows keyboard, numpads on keyboard and even your mouse!" />
+      <Label layoutX="11.0" layoutY="78.0" text="Move Mario using the arrows keyboard, numpads on keyboard or even your mouse!" />
       <Label layoutX="11.0" layoutY="95.0" text="Avoid different enemies or you will get down sized!" />
       <ImageView fx:id="img_tortuga" fitHeight="17.0" fitWidth="49.0" layoutX="289.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true">
       </ImageView>
