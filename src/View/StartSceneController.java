@@ -169,7 +169,7 @@ public class StartSceneController implements Initializable{
             viewModel.addObserver(view);
 
             stage.setResizable(false);
-            SetStageCloseEvent(stage);
+            SetStageCloseEvent(stage, view);
             stage.show();
             Stage currentStage = (Stage) btn_start.getScene().getWindow();
             currentStage.close();
@@ -178,13 +178,14 @@ public class StartSceneController implements Initializable{
         }
     }
 
-    private void SetStageCloseEvent(Stage stage) {
+    private void SetStageCloseEvent(Stage stage, MyViewController view) {
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent windowEvent) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK){
                     //Exit as needed
+                    view.closeScene(null);
                     System.exit(0);
                     // ... user chose OK
                     // Close program
