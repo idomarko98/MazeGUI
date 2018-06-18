@@ -243,6 +243,13 @@ public class MyMazeDisplayer extends Canvas {
                 canvasWidth = getWidth();
             }
         }
+        synchronized (zoomFactorLock){
+            zoomDelta = (maze.getColumnSize()+maze.getRowSize()) / 2;
+            zoomFactor = 0;
+            startX = 0;
+            startY = 0;
+        }
+
         this.maze = maze;
         shrink = false;
         movingRight = true;
@@ -293,22 +300,25 @@ public class MyMazeDisplayer extends Canvas {
 
     public void zoomOut(){
         synchronized (zoomFactorLock){
-            zoomFactor -= zoomDelta;
+            if((canvasHeight + zoomFactor) / maze.getRowSize() >= 1 && (canvasWidth + zoomFactor) / maze.getColumnSize() >=1)
+                zoomFactor -= zoomDelta;
         }
         drawMaze();
         //setCellHeightAndWidth();
     }
 
     public void changeCursorsPlace(double xTo, double yTo){
-        double extraMoveX = 0;
-        double extraMoveY = 0;
-        if(xTo < 0)
-            extraMoveX = -extraMoveX;
-        if(yTo < 0)
-            extraMoveY = -extraMoveY;
-        startX += xTo + extraMoveX;
-        startY += yTo + extraMoveY;
-        drawMaze();
+        if(maze != null) {
+            double extraMoveX = (cellWidth * maze.getColumnSize()) / canvasWidth;
+            double extraMoveY = (cellHeight * maze.getRowSize()) / canvasHeight;
+            if (xTo < 0)
+                extraMoveX = -extraMoveX;
+            if (yTo < 0)
+                extraMoveY = -extraMoveY;
+            startX += xTo + extraMoveX;
+            startY += yTo + extraMoveY;
+            drawMaze();
+        }
     }
 
     public int getCharacterPositionRow() {
