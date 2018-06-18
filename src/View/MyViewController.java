@@ -77,6 +77,9 @@ public class MyViewController implements Observer, IView {
             else if(arg instanceof ArrayList){
                 updateSolutionPath((ArrayList<AState>) arg);
             }
+            else if(arg instanceof Boolean){
+                mazeIsSolved();
+            }
             //displayMaze(viewModel.getMaze());
             //btn_generateMaze.setDisable(false);
         }
@@ -127,14 +130,21 @@ public class MyViewController implements Observer, IView {
     }
 
     public void generateMaze() {
-        int heigth = Integer.valueOf(txtfld_rowsNum.getText());
-        int width = Integer.valueOf(txtfld_columnsNum.getText());
+        int heigth = -1;
+        int width = -1;
+        try {
+            heigth = Integer.valueOf(txtfld_rowsNum.getText());
+            width = Integer.valueOf(txtfld_columnsNum.getText());
+        }
+        catch (Exception e){
+            showAlert("Values must be numeric");
+            return;
+        }
         if(heigth < 3 || width < 3 ){
             showAlert("Height and Width must be larger than 3");
             return;
         }
         btn_generateMaze.setDisable(true);
-        mazeDisplayer.setMazeIsSolved(false);
         mazeDisplayer.removeSolution();
         viewModel.generateMaze(width, heigth);
         if(musicThread != null && musicThread.isAlive()) {

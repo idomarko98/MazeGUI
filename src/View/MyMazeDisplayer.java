@@ -36,7 +36,6 @@ public class MyMazeDisplayer extends Canvas {
     private int characterPositionRow;
     private int characterPositionColumn;
     private boolean showSolution;
-    private boolean mazeIsSolved;
     public static boolean movingRight;
     public static boolean shrink;
     private GraphicsContext gc;
@@ -64,7 +63,6 @@ public class MyMazeDisplayer extends Canvas {
 
     public MyMazeDisplayer() {
         try {
-            mazeIsSolved = false;
             lock = new Object();
             lock2 = new Object();
             cellHeightAndWidthLock = new Object();
@@ -396,15 +394,7 @@ public class MyMazeDisplayer extends Canvas {
                     @Override
                     public void run() {
                         synchronized (cellHeightAndWidthLock) {
-                            if(maze.getGoalPosition().getColumnIndex() != characterPositionColumn || maze.getGoalPosition().getRowIndex() != characterPositionRow)
-                                gc.drawImage(/*characterImage*/character, startX + characterPositionColumn * cellHeight, startY + characterPositionRow * cellWidth, cellHeight, cellWidth);
-                            else {
-                                if(!mazeIsSolved){
-                                    setMazeIsSolved(true);
-                                    //openSolveScene();
-                                }
-                            }
-
+                            gc.drawImage(/*characterImage*/character, startX + characterPositionColumn * cellHeight, startY + characterPositionRow * cellWidth, cellHeight, cellWidth);
                         }
                     }
                 });
@@ -446,9 +436,6 @@ public class MyMazeDisplayer extends Canvas {
         }
     }
 
-    public void setMazeIsSolved(boolean bool){
-        mazeIsSolved = bool;
-    }
     /*
     private void drawSolution() {
         if (maze != null) {

@@ -4,6 +4,7 @@ package ViewModel;
 import Model.IModel;
 import Model.MyModel;
 import View.MyMazeDisplayer;
+import View.MyViewController;
 import algorithms.mazeGenerators.IMazeGenerator;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
@@ -76,6 +77,9 @@ public class MyViewModel extends Observable implements Observer{
             if(arg instanceof KeyCode || arg instanceof MouseEvent){
                 MyMazeDisplayer.shrink = true;
                 //startSound();
+            }
+            if(arg instanceof Boolean){
+                //
             }
             setChanged();
             notifyObservers(arg);

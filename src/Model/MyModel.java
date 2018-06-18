@@ -218,10 +218,17 @@ public class MyModel extends Observable implements IModel {
                     setCharacterPosition(new Position(characterPositionRow + 1, characterPositionColumn - 1));
                 break;
         }
+        if(characterPositionRow == maze.getGoalPosition().getRowIndex() && characterPositionColumn == maze.getGoalPosition().getColumnIndex())
+            notifySolved(true);
         /*
         setChanged();
         notifyObservers();
         */
+    }
+
+    private void notifySolved(boolean b) {
+        setChanged();
+        notifyObservers(b);
     }
 
     public void moveCharacter(MouseEvent movement, double startX, double startY){
@@ -247,6 +254,8 @@ public class MyModel extends Observable implements IModel {
                 else
                     setCharacterPosition(new Position(characterPositionRow, characterPositionColumn - 1));
             }
+            if(characterPositionRow == maze.getGoalPosition().getColumnIndex() && characterPositionColumn == maze.getGoalPosition().getColumnIndex())
+                notifySolved(true);
         }
     }
 
