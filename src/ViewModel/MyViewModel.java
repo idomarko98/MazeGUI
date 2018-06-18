@@ -142,5 +142,10 @@ public class MyViewModel extends Observable implements Observer{
     public void stopServers() {
         model.stopServers();
     }
+
+
+    public void load(Maze loadedMaze, Position loadedPoistion) {
+        model.load(loadedMaze, loadedPoistion);
+    }
 }
 

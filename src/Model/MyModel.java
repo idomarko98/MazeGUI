@@ -55,6 +55,12 @@ public class MyModel extends Observable implements IModel {
         mazeSolverServer.stop();
     }
 
+    @Override
+    public void load(Maze loadedMaze, Position loadedPoistion) {
+        setMaze(loadedMaze);
+        setCharacterPosition(loadedPoistion);
+    }
+
 
     @Override
     public void generateMaze(int width, int height) {

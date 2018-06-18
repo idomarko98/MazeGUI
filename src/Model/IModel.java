@@ -36,4 +36,6 @@ public interface IModel {
     int getCharacterPositionColumn();
 
     void stopServers();
+
+    void load(Maze loadedMaze, Position loadedPoistion);
 }

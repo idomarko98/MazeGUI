@@ -17,10 +17,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.input.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.File;
+import java.io.*;
 import java.util.*;
 
 public class MyViewController implements Observer, IView {
@@ -415,6 +416,53 @@ public class MyViewController implements Observer, IView {
             stage.show();
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public void save(ActionEvent actionEvent) {
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Maze Progress File", "*.mzprg"));
+            File file = fileChooser.showSaveDialog(null);
+            if (file != null) {
+                File saveFile = new File(file.getPath());
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(saveFile));
+                Object[] objects = new Object[2];
+                objects[0] = viewModel.getMaze();
+                objects[1] = new Position(viewModel.getCharacterPositionRow(),viewModel.getCharacterPositionColumn());
+                objectOutputStream.writeObject(objects);
+                objectOutputStream.flush();
+                objectOutputStream.close();
+            }
+            else{
+                showAlert("Error Saving");
+            }
+        }
+        catch (Exception e){
+            showAlert("Error Saving");
+        }
+    }
+
+    public void load(ActionEvent actionEvent) {
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Maze Progress File", "*.mzprg"));
+            File file = fileChooser.showOpenDialog(null);
+            if (file != null) {
+                File loadFile = new File(file.getPath());
+                FileInputStream inputStream = new FileInputStream(loadFile);
+                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                Object[] objects = (Object[])objectInputStream.readObject();
+                Maze loadedMaze = (Maze)objects[0];
+                Position loadedPoistion = (Position)objects[1];
+                viewModel.load(loadedMaze, loadedPoistion);
+                //displayMaze(loadedMaze);
+                objectInputStream.close();
+                inputStream.close();
+            }
+        }
+        catch (Exception e){
+            showAlert("Could not load file");
         }
     }
     //endregion

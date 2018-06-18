@@ -89,8 +89,8 @@
                         <Menu mnemonicParsing="false" text="File">
                             <items>
                                 <MenuItem onAction="#generateMaze" mnemonicParsing="false" text="New"/>
-                                <MenuItem fx:id="menu_item_save" disable="true" text="Save"/>
-                                <MenuItem text="Load"/>
+                                <MenuItem fx:id="menu_item_save"  onAction="#save" disable="true" text="Save"/>
+                                <MenuItem onAction="#load" text="Load"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Options">
