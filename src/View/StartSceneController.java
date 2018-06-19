@@ -139,6 +139,8 @@ public class StartSceneController implements Initializable{
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
             stage.show();
+            Stage currentStage = (Stage) btn_start.getScene().getWindow();
+            currentStage.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -162,9 +164,11 @@ public class StartSceneController implements Initializable{
 
             MyModel model = new MyModel();
             //model.startServers();
+
             MyViewModel viewModel = new MyViewModel(model);
             model.addObserver(viewModel);
             MyViewController view = fxmlLoader.getController();
+            view.setResizeEvent(scene);
             view.setViewModel(viewModel);
             viewModel.addObserver(view);
 
