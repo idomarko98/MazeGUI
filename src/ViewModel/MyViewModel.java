@@ -111,6 +111,7 @@ public class MyViewModel extends Observable implements Observer{
                     else if(side.equals("Right"))
                         MyMazeDisplayer.gombaMovingRight = true;
 
+                    arg = ((String)arg).substring(0,10);
                 }
                 else if(((String)arg).length() >= 10 && ((String)arg).substring(0,12).equals("TortugaMoved")) {
                     tortugaPositionRowIndex = model.getTortugaPositionRowIndex();
@@ -120,6 +121,8 @@ public class MyViewModel extends Observable implements Observer{
                         MyMazeDisplayer.tortugaMovingRight = false;
                     else if(side.equals("Right"))
                         MyMazeDisplayer.tortugaMovingRight = true;
+
+                    arg = ((String)arg).substring(0,12);
                 }
                 else if(((String)arg).equals("MushroomMoved")){
                     mushroomPositionRowIndex = model.getMushroomPositionRowIndex();

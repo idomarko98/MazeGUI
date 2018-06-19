@@ -175,7 +175,7 @@ public class MyMazeDisplayer extends Canvas {
                     synchronized (gombaLock) {
                         drawGomba();
                     }
-                    Thread.sleep(1000);
+                    Thread.sleep(200);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
