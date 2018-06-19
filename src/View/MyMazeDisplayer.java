@@ -175,7 +175,8 @@ public class MyMazeDisplayer extends Canvas {
 
                     firstImage = !firstImage;
                     synchronized (gombaLock) {
-                        drawGomba();
+                        if(!showSolution)
+                            drawGomba();
                     }
                     Thread.sleep(200);
                 } catch (Exception e) {
@@ -209,7 +210,8 @@ public class MyMazeDisplayer extends Canvas {
 
                     firstImage = !firstImage;
                     synchronized (tortugaLock) {
-                        drawTortuga();
+                        if(!showSolution)
+                            drawTortuga();
                     }
                     Thread.sleep(200);
                 } catch (Exception e) {
@@ -802,7 +804,8 @@ public class MyMazeDisplayer extends Canvas {
             drawSpot(gombaPositionRow, gombaPositionColumn);
             this.gombaPositionRow = gombaPositionRowIndex;
             this.gombaPositionColumn = gombaPositionColumnIndex;
-            drawGomba();
+            if(!showSolution)
+                drawGomba();
         }
     }
 
@@ -812,7 +815,8 @@ public class MyMazeDisplayer extends Canvas {
             drawSpot(tortugaPositionRow, tortugaPositionColumn);
             this.tortugaPositionRow = tortugaPositionRowIndex;
             this.tortugaPositionColumn = tortugaPositionColumnIndex;
-            drawTortuga();
+            if(!showSolution)
+                drawTortuga();
         }
     }
 
