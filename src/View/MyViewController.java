@@ -550,7 +550,7 @@ public class MyViewController implements Observer, IView, Initializable {
         for(int i = 0; i < stateList.size(); i++){
             MazeState mazeState = (MazeState)stateList.get(i);
             Position posState = mazeState.getPositionOfMazeState();
-            //if(posState.getRowIndex() == characterPositionRow && posState.getColumnIndex() == characterPositionColumn + 1)//moving Right
+            //if(posState.getRowIndex() == Integer.valueOf(getCharacterPositionRow()) && (posState.getColumnIndex() == Integer.valueOf(getCharacterPositionRow()) + 1))//moving Right
         }
     }
 
