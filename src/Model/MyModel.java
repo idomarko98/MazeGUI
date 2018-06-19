@@ -49,6 +49,10 @@ public class MyModel extends Observable implements IModel {
     private int mushroomPositionRow;
     private int mushroomPositionColumn;
 
+    private volatile boolean showGomba;
+    private volatile boolean showTortuga;
+    private volatile boolean showMushroom;
+
     private volatile Object gombaLock;
 
     private volatile Object tortugaLock;
@@ -76,6 +80,11 @@ public class MyModel extends Observable implements IModel {
 
         mushroomPositionRow = 1;
         mushroomPositionColumn = 1;
+
+        showGomba = true;
+        showTortuga = true;
+        showMushroom = true;
+
     }
 
     public void startServers() {
@@ -186,6 +195,11 @@ public class MyModel extends Observable implements IModel {
                                 toServer.flush();
                                 setSolution((Solution) fromServer.readObject()); //read generated maze (compressed with MyCompressor) from server
 
+                                setMushroomPosition(new Position(-1, -1));
+
+                                showGomba = false;
+                                showMushroom = false;
+                                showTortuga = false;
                             } catch (Exception e) {
                                 System.out.println(e.getMessage());
                             }
@@ -449,8 +463,9 @@ public class MyModel extends Observable implements IModel {
     }
 
     private void moveGomba(){
+        showGomba = true;
         Thread moveGomba = new Thread(()->{
-            while (true) {
+            while (showGomba) {
                 Position moveTo = pickRandomAdjPosition(gombaPositionRow, gombaPositionColumn);
                 setGombaPosition(moveTo);
                 try {
@@ -459,6 +474,7 @@ public class MyModel extends Observable implements IModel {
                     System.out.println(e.getMessage());
                 }
             }
+            setGombaPosition(new Position(-1, -1));
         });
         moveGomba.start();
     }
@@ -542,8 +558,9 @@ public class MyModel extends Observable implements IModel {
     }
 
     private void moveTortuga(){
+        showTortuga = true;
         Thread moveTortuga = new Thread(()->{
-            while (true) {
+            while (showTortuga) {
                 Position moveTo = pickTortugaRandomAdjPosition(tortugaPositionRow, tortugaPositionColumn);
                 setTortugaPosition(moveTo);
                 try {
@@ -552,6 +569,7 @@ public class MyModel extends Observable implements IModel {
                     System.out.println(e.getMessage());
                 }
             }
+            setTortugaPosition(new Position(-1, -1));
         });
         moveTortuga.start();
     }
