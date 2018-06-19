@@ -584,12 +584,16 @@ public class MyViewController implements Observer, IView, Initializable {
         for(int i = 0; i < stateList.size(); i++){
             MazeState mazeState = (MazeState)stateList.get(i);
             Position posState = mazeState.getPositionOfMazeState();
-            if((i == stateList.size()-1) && i > 0)
-                playDirectionsAnd();
+            //if((i == stateList.size()-1) && i > 0)
+              //  playDirectionsAnd();
             if(posState.getRowIndex() == Integer.valueOf(getCharacterPositionRow()) && (posState.getColumnIndex() == Integer.valueOf(getCharacterPositionColumn()) + 1))//moving Right
                 playDirectionsRight();
             if(posState.getRowIndex() == Integer.valueOf(getCharacterPositionRow()) && (posState.getColumnIndex() == Integer.valueOf(getCharacterPositionColumn()) - 1))//moving Right
                 playDirectionsLeft();
+            if(posState.getRowIndex() == Integer.valueOf(getCharacterPositionRow()) + 1 && (posState.getColumnIndex() == Integer.valueOf(getCharacterPositionColumn())))//moving Down
+                playDirectionsDown();
+            if(posState.getRowIndex() == Integer.valueOf(getCharacterPositionRow()) - 1 && (posState.getColumnIndex() == Integer.valueOf(getCharacterPositionColumn())))//moving Down
+                playDirectionsUp();
         }
     }
 
@@ -621,6 +625,22 @@ public class MyViewController implements Observer, IView, Initializable {
         synchronized (directionsLock){
             Media goRight = new Media(this.getClass().getResource("/Sounds/Blind/right.mp3").toString());
             directions = new MediaPlayer(goRight);
+            directions.play();
+        }
+    }
+
+    private void playDirectionsDown() {
+        synchronized (directionsLock){
+            Media goDown = new Media(this.getClass().getResource("/Sounds/Blind/down.mp3").toString());
+            directions = new MediaPlayer(goDown);
+            directions.play();
+        }
+    }
+
+    private void playDirectionsUp() {
+        synchronized (directionsLock){
+            Media goUp = new Media(this.getClass().getResource("/Sounds/Blind/up.mp3").toString());
+            directions = new MediaPlayer(goUp);
             directions.play();
         }
     }
