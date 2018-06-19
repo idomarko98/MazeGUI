@@ -161,7 +161,7 @@ public class SettingsSceneController implements Initializable {
             //Stage currentStage = (Stage) ButtonSaveSettings.getScene().getWindow();
             //currentStage.close();
             //openStartPage();
-            showAlert("Settings have been changed successfully, Going back to main menu");
+            showAlert("Settings have been changed successfully. Going back to main menu");
         }
     }
 
@@ -234,6 +234,6 @@ public class SettingsSceneController implements Initializable {
         //Stage currentStage = (Stage) ButtonSaveSettings.getScene().getWindow();
         //currentStage.close();
         //openStartPage();
-        showAlert("Settings not saved, going back to main menu");
+        showAlert("Settings not saved. Going back to main menu");
     }
 }

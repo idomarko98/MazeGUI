@@ -336,8 +336,10 @@ public class MyModel extends Observable implements IModel {
                 }
                 if (characterPositionRow == maze.getGoalPosition().getRowIndex() && characterPositionColumn == maze.getGoalPosition().getColumnIndex())
                     notifySolved(true);
+                if((characterPositionRow == tortugaPositionRow && characterPositionColumn == tortugaPositionColumn) || (characterPositionRow == gombaPositionRow && characterPositionColumn == gombaPositionColumn))
+                    notifyCollide("collide");
                 if(characterPositionColumn == mushroomPositionColumn && characterPositionRow == mushroomPositionRow)
-                    notifyObservers("collideWithMushroom");
+                    notifyCollideWithMushroom("collideWithMushroom");
             }
         }
     }

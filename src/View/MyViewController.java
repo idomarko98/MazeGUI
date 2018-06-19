@@ -339,6 +339,8 @@ public class MyViewController implements Observer, IView, Initializable {
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
             stage.show();
+            Stage currentStage = (Stage) btn_solveMaze.getScene().getWindow();
+            currentStage.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
