@@ -343,6 +343,8 @@ public class MyModel extends Observable implements IModel {
     }
 
     private void notifyCollideWithMushroom(String collideWithMushroom) {
+        showMushroom = false;
+        setMushroomPosition(new Position(-1, -1));
         setChanged();
         notifyObservers(collideWithMushroom);
     }
@@ -460,6 +462,9 @@ public class MyModel extends Observable implements IModel {
         }
         setChanged();
         notifyObservers("GombaMoved" + gombaMoveToSide);
+
+        if(characterPositionRow == gombaPositionRow && characterPositionColumn == gombaPositionColumn)
+            notifyCollide("collide");
     }
 
     private void moveGomba(){
@@ -555,6 +560,9 @@ public class MyModel extends Observable implements IModel {
         }
         setChanged();
         notifyObservers("TortugaMoved" + tortugaMoveToSide);
+
+        if(characterPositionRow == tortugaPositionRow && characterPositionColumn == tortugaPositionColumn)
+            notifyCollide("collide");
     }
 
     private void moveTortuga(){
