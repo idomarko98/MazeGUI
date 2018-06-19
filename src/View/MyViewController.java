@@ -5,6 +5,7 @@ import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.AState;
 import algorithms.search.Solution;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -24,6 +25,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.lang.management.PlatformLoggingMXBean;
 import java.net.URL;
 import java.util.*;
 
@@ -47,6 +49,7 @@ public class MyViewController implements Observer, IView, Initializable {
     public javafx.scene.control.TextField txtfld_columnsNum;
     public javafx.scene.control.Label lbl_rowsNum;
     public javafx.scene.control.Label lbl_columnsNum;
+    public javafx.scene.control.Label lbl_status;
     public javafx.scene.control.Button btn_generateMaze;
     public javafx.scene.control.Button btn_solveMaze;
     public javafx.scene.control.Button btn_cancel;
@@ -188,6 +191,7 @@ public class MyViewController implements Observer, IView, Initializable {
             showAlert("Height and Width must be larger than 3");
             return;
         }
+        lbl_status.setText("Status Bar: Generating Maze, please wait...");
         btn_cancel.setVisible(true);
         btn_generateMaze.setDisable(true);
         mazeDisplayer.removeSolution();
@@ -198,6 +202,7 @@ public class MyViewController implements Observer, IView, Initializable {
         }
         menu_item_save.setDisable(false);
         playTheme();
+        lbl_status.setText("Status Bar: Maze Generated");
     }
 
     private void playTheme() {
@@ -340,6 +345,7 @@ public class MyViewController implements Observer, IView, Initializable {
             stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
             stage.show();
             Stage currentStage = (Stage) btn_solveMaze.getScene().getWindow();
+            themeMediaPlayer.stop();
             currentStage.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());

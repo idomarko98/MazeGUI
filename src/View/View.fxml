@@ -78,7 +78,7 @@
     <bottom>
         <HBox BorderPane.alignment="CENTER">
             <children>
-                <Label text="Status bar"/>
+                <Label fx:id="lbl_status" text="Status bar"/>
             </children>
         </HBox>
     </bottom>
