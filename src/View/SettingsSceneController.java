@@ -158,10 +158,10 @@ public class SettingsSceneController implements Initializable {
 
         if(validText){
             MyViewModel.setConfigurations(numOfThreads, selectedGeneratingAlgorithm, selectedSolvingAlgorithm);
-            showAlert("Settings has been changed successfully :)");
-            Stage currentStage = (Stage) ButtonSaveSettings.getScene().getWindow();
-            currentStage.close();
-            openStartPage();
+            //Stage currentStage = (Stage) ButtonSaveSettings.getScene().getWindow();
+            //currentStage.close();
+            //openStartPage();
+            showAlert("Settings have been changed successfully, Going back to main menu");
         }
     }
 
@@ -169,7 +169,7 @@ public class SettingsSceneController implements Initializable {
         try {
             Stage primaryStage = new Stage();
             MyModel model = new MyModel();
-            model.startServers();
+            //model.startServers();
             MyViewModel viewModel = new MyViewModel(model);
             //model.addObserver(viewModel);
             //--------------
@@ -188,6 +188,8 @@ public class SettingsSceneController implements Initializable {
             //view.setViewModel(viewModel);
             //viewModel.addObserver(view);
             //--------------
+            Stage currentStage = (Stage) ButtonSaveSettings.getScene().getWindow();
+            currentStage.close();
             SetStageCloseEvent(primaryStage);
             primaryStage.show();
         } catch (Exception e) {
@@ -215,6 +217,7 @@ public class SettingsSceneController implements Initializable {
     private void showAlert(String alertMessage) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setContentText(alertMessage);
+        alert.setOnCloseRequest(event -> openStartPage());
         alert.show();
     }
 
@@ -228,9 +231,9 @@ public class SettingsSceneController implements Initializable {
     }
 
     public void CancelSettingsClicked(ActionEvent actionEvent) {
-        showAlert("Bye, and enjoy the game!");
-        Stage currentStage = (Stage) ButtonSaveSettings.getScene().getWindow();
-        currentStage.close();
-        openStartPage();
+        //Stage currentStage = (Stage) ButtonSaveSettings.getScene().getWindow();
+        //currentStage.close();
+        //openStartPage();
+        showAlert("Settings not saved, going back to main menu");
     }
 }
