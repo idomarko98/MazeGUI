@@ -47,6 +47,9 @@ public class MyViewController implements Observer, IView, Initializable {
     private volatile boolean startedDraggingWithoutCtrl = false;
     //private volatile boolean stopLostSound = false;
 
+    private volatile Object directionsLock = new Object();
+    private MediaPlayer directions;
+
     public MyMazeDisplayer mazeDisplayer;
     public javafx.scene.control.TextField txtfld_rowsNum;
     public javafx.scene.control.TextField txtfld_columnsNum;
@@ -108,7 +111,12 @@ public class MyViewController implements Observer, IView, Initializable {
             }
             else if(arg instanceof Object[]){
                 if(menu_item_blind.isSelected()){
-                    List<AState> stateList = (List<AState>)arg;
+                    if(directions != null)
+                        directions.stop();
+                    List<AState> stateList = new ArrayList<>();
+                    Object[] objects = (Object[])arg;
+                    for(int i = 0; i < objects.length; i++)
+                        stateList.add((AState)objects[i]);
                     helpTheBlind(stateList);
                 }
             }
@@ -572,10 +580,48 @@ public class MyViewController implements Observer, IView, Initializable {
     }
 
     private void helpTheBlind(List<AState> stateList) {
+        playDirectionsMove();
         for(int i = 0; i < stateList.size(); i++){
             MazeState mazeState = (MazeState)stateList.get(i);
             Position posState = mazeState.getPositionOfMazeState();
-            //if(posState.getRowIndex() == Integer.valueOf(getCharacterPositionRow()) && (posState.getColumnIndex() == Integer.valueOf(getCharacterPositionRow()) + 1))//moving Right
+            if((i == stateList.size()-1) && i > 0)
+                playDirectionsAnd();
+            if(posState.getRowIndex() == Integer.valueOf(getCharacterPositionRow()) && (posState.getColumnIndex() == Integer.valueOf(getCharacterPositionColumn()) + 1))//moving Right
+                playDirectionsRight();
+            if(posState.getRowIndex() == Integer.valueOf(getCharacterPositionRow()) && (posState.getColumnIndex() == Integer.valueOf(getCharacterPositionColumn()) - 1))//moving Right
+                playDirectionsLeft();
+        }
+    }
+
+    private void playDirectionsAnd() {
+        synchronized (directionsLock){
+            Media goLeft = new Media(this.getClass().getResource("/Sounds/Blind/and.mp3").toString());
+            directions = new MediaPlayer(goLeft);
+            directions.play();
+        }
+    }
+
+    private void playDirectionsLeft() {
+        synchronized (directionsLock){
+            Media goLeft = new Media(this.getClass().getResource("/Sounds/Blind/left.mp3").toString());
+            directions = new MediaPlayer(goLeft);
+            directions.play();
+        }
+    }
+
+    private void playDirectionsMove() {
+        synchronized (directionsLock){
+            Media move = new Media(this.getClass().getResource("/Sounds/Blind/move.mp3").toString());
+            directions = new MediaPlayer(move);
+            directions.play();
+        }
+    }
+
+    private void playDirectionsRight() {
+        synchronized (directionsLock){
+            Media goRight = new Media(this.getClass().getResource("/Sounds/Blind/right.mp3").toString());
+            directions = new MediaPlayer(goRight);
+            directions.play();
         }
     }
 

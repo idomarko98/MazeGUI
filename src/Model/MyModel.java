@@ -221,7 +221,7 @@ public class MyModel extends Observable implements IModel {
                         notifyNotAbleToMove(movement);
                     else {
                         setCharacterPosition(new Position(characterPositionRow - 1, characterPositionColumn));
-                        notifyPossibleMoves(new Position(characterPositionRow - 1, characterPositionColumn));
+                        notifyPossibleMoves(new Position(characterPositionRow, characterPositionColumn));
                     }
                     break;
                 case NUMPAD8:
@@ -229,7 +229,7 @@ public class MyModel extends Observable implements IModel {
                         notifyNotAbleToMove(movement);
                     else {
                         setCharacterPosition(new Position(characterPositionRow - 1, characterPositionColumn));
-                        notifyPossibleMoves(new Position(characterPositionRow - 1, characterPositionColumn));
+                        notifyPossibleMoves(new Position(characterPositionRow , characterPositionColumn));
                     }
                     break;
 
@@ -238,7 +238,7 @@ public class MyModel extends Observable implements IModel {
                         notifyNotAbleToMove(movement);
                     else {
                         setCharacterPosition(new Position(characterPositionRow + 1, characterPositionColumn));
-                        notifyPossibleMoves(new Position(characterPositionRow + 1, characterPositionColumn));
+                        notifyPossibleMoves(new Position(characterPositionRow, characterPositionColumn));
                     }
                     break;
                 case NUMPAD2:
@@ -246,7 +246,7 @@ public class MyModel extends Observable implements IModel {
                         notifyNotAbleToMove(movement);
                     else {
                         setCharacterPosition(new Position(characterPositionRow + 1, characterPositionColumn));
-                        notifyPossibleMoves(new Position(characterPositionRow + 1, characterPositionColumn));
+                        notifyPossibleMoves(new Position(characterPositionRow, characterPositionColumn));
                     }
                     break;
 
@@ -255,7 +255,7 @@ public class MyModel extends Observable implements IModel {
                         notifyNotAbleToMove(movement);
                     else {
                         setCharacterPosition(new Position(characterPositionRow, characterPositionColumn + 1));
-                        notifyPossibleMoves(new Position(characterPositionRow, characterPositionColumn + 1));
+                        notifyPossibleMoves(new Position(characterPositionRow, characterPositionColumn));
                     }
                     break;
                 case NUMPAD6:
@@ -263,7 +263,7 @@ public class MyModel extends Observable implements IModel {
                         notifyNotAbleToMove(movement);
                     else {
                         setCharacterPosition(new Position(characterPositionRow, characterPositionColumn + 1));
-                        notifyPossibleMoves(new Position(characterPositionRow, characterPositionColumn + 1));
+                        notifyPossibleMoves(new Position(characterPositionRow, characterPositionColumn));
                     }
                     break;
 
@@ -272,7 +272,7 @@ public class MyModel extends Observable implements IModel {
                         notifyNotAbleToMove(movement);
                     else {
                         setCharacterPosition(new Position(characterPositionRow, characterPositionColumn - 1));
-                        notifyPossibleMoves(new Position(characterPositionRow, characterPositionColumn - 1));
+                        notifyPossibleMoves(new Position(characterPositionRow, characterPositionColumn));
                     }
                     break;
                 case NUMPAD4:
@@ -280,7 +280,7 @@ public class MyModel extends Observable implements IModel {
                         notifyNotAbleToMove(movement);
                     else {
                         setCharacterPosition(new Position(characterPositionRow, characterPositionColumn - 1));
-                        notifyPossibleMoves(new Position(characterPositionRow, characterPositionColumn - 1));
+                        notifyPossibleMoves(new Position(characterPositionRow, characterPositionColumn ));
                     }
                     break;
 
@@ -289,7 +289,7 @@ public class MyModel extends Observable implements IModel {
                         notifyNotAbleToMove(movement);
                     else {
                         setCharacterPosition(new Position(characterPositionRow - 1, characterPositionColumn + 1));
-                        notifyPossibleMoves(new Position(characterPositionRow - 1, characterPositionColumn + 1));
+                        notifyPossibleMoves(new Position(characterPositionRow, characterPositionColumn));
                     }
                     break;
 
@@ -298,7 +298,7 @@ public class MyModel extends Observable implements IModel {
                         notifyNotAbleToMove(movement);
                     else {
                         setCharacterPosition(new Position(characterPositionRow - 1, characterPositionColumn - 1));
-                        notifyPossibleMoves(new Position(characterPositionRow - 1, characterPositionColumn - 1));
+                        notifyPossibleMoves(new Position(characterPositionRow, characterPositionColumn));
                     }
                     break;
 
