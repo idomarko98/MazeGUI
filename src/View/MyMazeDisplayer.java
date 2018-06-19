@@ -142,6 +142,14 @@ public class MyMazeDisplayer extends Canvas {
         }
     }
 
+    public void updateCanvasProperties() {
+        synchronized (cellHeightAndWidthLock) {
+            canvasHeight = getHeight();
+            canvasWidth = getWidth();
+        }
+        drawMaze();
+    }
+
     private void ChagingGombaImage() {
         Thread thread = new Thread(()->{
             boolean firstImage = true;

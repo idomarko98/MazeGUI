@@ -12,6 +12,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -23,9 +24,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
-public class MyViewController implements Observer, IView {
+public class MyViewController implements Observer, IView, Initializable {
 
     @FXML
     private MyViewModel viewModel;
@@ -49,6 +51,7 @@ public class MyViewController implements Observer, IView {
     public javafx.scene.control.Button btn_solveMaze;
     public javafx.scene.control.Button btn_cancel;
     public javafx.scene.control.MenuItem menu_item_save;
+    public javafx.scene.layout.BorderPane borderPane_view;
 
     public void setViewModel(MyViewModel viewModel) {
         this.viewModel = viewModel;
@@ -297,18 +300,16 @@ public class MyViewController implements Observer, IView {
     }
 
     public void setResizeEvent(Scene scene) {
-        long width = 0;
-        long height = 0;
         scene.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-                System.out.println("Width: " + newSceneWidth);
+                mazeDisplayer.updateCanvasProperties();
             }
         });
         scene.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-                System.out.println("Height: " + newSceneHeight);
+                mazeDisplayer.updateCanvasProperties();
             }
         });
     }
@@ -511,6 +512,12 @@ public class MyViewController implements Observer, IView {
     public void cancelGenerating(ActionEvent actionEvent) {
         viewModel.stopServers();
         btn_cancel.setVisible(false);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        mazeDisplayer.heightProperty().bind(borderPane_view.heightProperty().divide(1.1)/*.add(-100)*/);
+        mazeDisplayer.widthProperty().bind(borderPane_view.widthProperty().divide(1.1).add(-150));
     }
     //endregion
 
