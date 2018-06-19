@@ -97,7 +97,8 @@
                         <Menu mnemonicParsing="false" text="Options">
                             <items>
                                 <MenuItem onAction="#openSettingsScene" mnemonicParsing="false" text="Properties"/>
-                                <CheckMenuItem text="Mind the Blind"></CheckMenuItem>
+                                <MenuItem onAction="#restartView" mnemonicParsing="false" text="Restart View"/>
+                                <CheckMenuItem fx:id="menu_item_blind" text="Mind the Blind"></CheckMenuItem>
                             </items>
                     </Menu>
                         <Menu mnemonicParsing="false" text="More">

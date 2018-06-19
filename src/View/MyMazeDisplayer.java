@@ -813,6 +813,9 @@ public class MyMazeDisplayer extends Canvas {
         }
     }
 
+    public void restartMazeView(){
+
+    }
     /*
     public void changeCoin(int col, int row, double cellWidth, double cellHeight, GraphicsContext gc){
         Thread threadcoin = new Thread(()->{

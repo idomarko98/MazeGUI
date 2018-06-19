@@ -55,6 +55,7 @@ public class MyViewController implements Observer, IView, Initializable {
     public javafx.scene.control.Button btn_solveMaze;
     public javafx.scene.control.Button btn_cancel;
     public javafx.scene.control.MenuItem menu_item_save;
+    public javafx.scene.control.CheckMenuItem menu_item_blind;
     public javafx.scene.layout.BorderPane borderPane_view;
 
     public void setViewModel(MyViewModel viewModel) {
@@ -104,11 +105,17 @@ public class MyViewController implements Observer, IView, Initializable {
                     playCollideMushroomSound();
             }
             else if(arg instanceof Object[]){
-                System.out.println("hi");
+                if(menu_item_blind.isSelected()){
+                    List<AState> stateList = (List<AState>)arg;
+                    helpTheBlind(stateList);
+                }
             }
             //displayMaze(viewModel.getMaze());
             //btn_generateMaze.setDisable(false);
         }
+    }
+
+    private void helpTheBlind(List<AState> stateList) {
     }
 
 
@@ -534,6 +541,10 @@ public class MyViewController implements Observer, IView, Initializable {
         borderPane_view.setPrefHeight(Screen.getPrimary().getVisualBounds().getHeight()*((double)4/(double)5));
         borderPane_view.setPrefWidth(Screen.getPrimary().getVisualBounds().getWidth()*((double)2/(double)3));
 
+    }
+
+    public void restartView(ActionEvent actionEvent) {
+        mazeDisplayer.restartMazeView();
     }
     //endregion
 
