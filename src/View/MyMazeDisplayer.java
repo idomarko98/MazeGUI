@@ -177,6 +177,8 @@ public class MyMazeDisplayer extends Canvas {
                     synchronized (gombaLock) {
                         if(!showSolution)
                             drawGomba();
+                        else
+                            drawSpot(gombaPositionRow, gombaPositionColumn);
                     }
                     Thread.sleep(200);
                 } catch (Exception e) {
@@ -212,6 +214,8 @@ public class MyMazeDisplayer extends Canvas {
                     synchronized (tortugaLock) {
                         if(!showSolution)
                             drawTortuga();
+                        else
+                            drawSpot(tortugaPositionRow,tortugaPositionColumn);
                     }
                     Thread.sleep(200);
                 } catch (Exception e) {
@@ -626,7 +630,7 @@ public class MyMazeDisplayer extends Canvas {
     }
 
     private void drawSpot(int row, int column) {
-        if (maze != null) {
+        if (maze != null && row >= 0 && column >= 0) {
 
             /*
             Image wall = new Image(new FileInputStream("resources/images/Displayed On Maze/brick.png"));
