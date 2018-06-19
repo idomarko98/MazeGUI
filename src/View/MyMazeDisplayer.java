@@ -135,7 +135,6 @@ public class MyMazeDisplayer extends Canvas {
             ChangingCoinImage();
             ChagingGombaImage();
             ChagingTortugaImage();
-            drawMushroom();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -344,18 +343,24 @@ public class MyMazeDisplayer extends Canvas {
         }
     }
 
+    public void restartMazeView(){
+        if(maze != null) {
+            synchronized (zoomFactorLock) {
+                zoomDelta = (maze.getColumnSize() + maze.getRowSize()) / 2;
+                zoomFactor = 0;
+                startX = 0;
+                startY = 0;
+            }
+            drawMaze();
+        }
+    }
+
     public void setMaze(Maze maze) {
         synchronized (cellHeightAndWidthLock) {
             if (canvasHeight == 0 && canvasWidth == 0) {
                 canvasHeight = getHeight();
                 canvasWidth = getWidth();
             }
-        }
-        synchronized (zoomFactorLock){
-            zoomDelta = (maze.getColumnSize()+maze.getRowSize()) / 2;
-            zoomFactor = 0;
-            startX = 0;
-            startY = 0;
         }
 
         this.maze = maze;
@@ -364,7 +369,7 @@ public class MyMazeDisplayer extends Canvas {
         gombaMovingRight = true;
         tortugaMovingRight = true;
         //redraw();
-        drawMaze();
+        restartMazeView();
     }
 
     /*
@@ -499,6 +504,7 @@ public class MyMazeDisplayer extends Canvas {
                         drawSpot(i, j);
                     }
                 }
+                drawMushroom();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -813,9 +819,7 @@ public class MyMazeDisplayer extends Canvas {
         }
     }
 
-    public void restartMazeView(){
 
-    }
     /*
     public void changeCoin(int col, int row, double cellWidth, double cellHeight, GraphicsContext gc){
         Thread threadcoin = new Thread(()->{
