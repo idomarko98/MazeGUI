@@ -44,6 +44,7 @@ public class MyViewController implements Observer, IView, Initializable {
     private volatile double dragAndCtrlPreviousX = 0;
     private volatile double dragAndCtrlPreviousY = 0;
     private volatile boolean startedDragging = false;
+    private volatile boolean startedDraggingWithoutCtrl = false;
     //private volatile boolean stopLostSound = false;
 
     public MyMazeDisplayer mazeDisplayer;
@@ -278,8 +279,6 @@ public class MyViewController implements Observer, IView, Initializable {
     }
 
     public void MouseReleased(MouseEvent mouseEvent) {
-        viewModel.moveCharacter(mouseEvent, startX, startY);
-
         DragDone(mouseEvent);
         mouseEvent.consume();
 
@@ -430,10 +429,28 @@ public class MyViewController implements Observer, IView, Initializable {
     }
 
     public void MouseDragged(MouseEvent mouseEvent) {
-        if(mouseEvent.isControlDown()){
-            if(startedDragging)
+        if(mouseEvent.isControlDown()) {
+            if (startedDragging) {
                 mazeDisplayer.changeCursorsPlace((mouseEvent.getX() - dragAndCtrlPreviousX) / dragAndCtrlPreviousX, (mouseEvent.getY() - dragAndCtrlPreviousY) / dragAndCtrlPreviousY);
+                dragAndCtrlPreviousX = mouseEvent.getX();
+                dragAndCtrlPreviousY = mouseEvent.getY();
+            }
         }
+        else{
+            if(startedDraggingWithoutCtrl) {
+                if(enoughForMovement(mouseEvent, startX, startY)) {
+                    viewModel.moveCharacter(mouseEvent, startX, startY);
+                    startX = mouseEvent.getX();
+                    startY = mouseEvent.getY();
+                }
+            }
+        }
+    }
+
+    private boolean enoughForMovement(MouseEvent mouseEvent, double startX, double startY) {
+        boolean leftOrRight = Math.abs(mouseEvent.getX()-startX) >= mazeDisplayer.getCellWidth();
+        boolean upOrDown = Math.abs(mouseEvent.getY()-startY) >= mazeDisplayer.getCellHeight();
+        return leftOrRight || upOrDown;
     }
 
     public void DragDetected(MouseEvent mouseEvent) {
@@ -443,10 +460,18 @@ public class MyViewController implements Observer, IView, Initializable {
             startedDragging = true;
             //System.out.println("Drag Detected");
         }
+        else{
+            startX = mouseEvent.getX();
+            startY = mouseEvent.getY();
+            startedDraggingWithoutCtrl = true;
+        }
     }
 
     public void DragDone(MouseEvent mouseEvent) {
         startedDragging = false;
+        startedDraggingWithoutCtrl = false;
+        startX = mouseEvent.getX();
+        startY = mouseEvent.getY();
         dragAndCtrlPreviousX = mouseEvent.getX();
         dragAndCtrlPreviousY = mouseEvent.getY();
     }

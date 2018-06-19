@@ -346,12 +346,12 @@ public class MyModel extends Observable implements IModel {
     public void moveCharacter(MouseEvent movement, double startX, double startY){
         if(maze != null) {
             if (!movement.isControlDown()) {
-                if (movement.getY() < startY && (Math.abs(movement.getY() - startY) > 70)) {
+                if (movement.getY() < startY && (Math.abs(movement.getY() - startY) > /*70*/10)) {
                     if (maze.getAtIndex(characterPositionRow - 1, characterPositionColumn) != 0)
                         notifyNotAbleToMove(movement);
                     else
                         setCharacterPosition(new Position(characterPositionRow - 1, characterPositionColumn));
-                } else if (movement.getY() > startY && (Math.abs(movement.getY() - startY) > 70)) {
+                } else if (movement.getY() > startY && (Math.abs(movement.getY() - startY) > /*70*/10)) {
                     if (maze.getAtIndex(characterPositionRow + 1, characterPositionColumn) != 0)
                         notifyNotAbleToMove(movement);
                     else
