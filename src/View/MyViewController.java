@@ -4,6 +4,7 @@ import ViewModel.MyViewModel;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.AState;
+import algorithms.search.MazeState;
 import algorithms.search.Solution;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -114,10 +115,6 @@ public class MyViewController implements Observer, IView, Initializable {
             //btn_generateMaze.setDisable(false);
         }
     }
-
-    private void helpTheBlind(List<AState> stateList) {
-    }
-
 
     private void playCollideMushroomSound() {
         Media sound = new Media(this.getClass().getResource("/Sounds/resizing sound.mp3").toString());
@@ -347,6 +344,7 @@ public class MyViewController implements Observer, IView, Initializable {
 
     public void openSettingsScene(ActionEvent actionEvent) {
         try {
+            viewModel.stopServers();
             Stage stage = new Stage();
             stage.setTitle("Settings");
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -356,7 +354,8 @@ public class MyViewController implements Observer, IView, Initializable {
             stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
             stage.show();
             Stage currentStage = (Stage) btn_solveMaze.getScene().getWindow();
-            themeMediaPlayer.stop();
+            if(themeMediaPlayer != null)
+                themeMediaPlayer.stop();
             currentStage.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -546,6 +545,15 @@ public class MyViewController implements Observer, IView, Initializable {
     public void restartView(ActionEvent actionEvent) {
         mazeDisplayer.restartMazeView();
     }
+
+    private void helpTheBlind(List<AState> stateList) {
+        for(int i = 0; i < stateList.size(); i++){
+            MazeState mazeState = (MazeState)stateList.get(i);
+            Position posState = mazeState.getPositionOfMazeState();
+            //if(posState.getRowIndex() == characterPositionRow && posState.getColumnIndex() == characterPositionColumn + 1)//moving Right
+        }
+    }
+
     //endregion
 
 }
