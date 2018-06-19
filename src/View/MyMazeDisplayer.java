@@ -364,11 +364,7 @@ public class MyMazeDisplayer extends Canvas {
                 canvasHeight = getHeight();
                 canvasWidth = getWidth();
             }
-            for(int i = 0; i < maze.getRowSize(); i++)
-                for(int j = 0; j < maze.getColumnSize(); j++)
-                {
-           //         if()
-                }
+            setRandomQuestionBricks(maze);
         }
 
         this.maze = maze;
@@ -654,9 +650,7 @@ public class MyMazeDisplayer extends Canvas {
             try{
                 synchronized (cellHeightAndWidthLock) {
                     if (maze.getAtIndex(row, column) == 1) {
-                        Random r = new Random();
-                        int result = r.nextInt(10);
-                        if(result == 5)
+                        if(questionBricksList.contains(new Position(row,column)))
                             gc.drawImage(questionBrick, startX + column * cellWidth, startY + row * cellHeight, cellWidth, cellHeight);
                         else
                             gc.drawImage(wall, startX + column * cellWidth, startY + row * cellHeight, cellWidth, cellHeight);
@@ -838,6 +832,18 @@ public class MyMazeDisplayer extends Canvas {
 
     public double getCellWidth() {
         return cellWidth;
+    }
+
+    public void setRandomQuestionBricks(Maze maze) {
+        for(int i = 0; i < maze.getRowSize(); i++)
+            for(int j = 0; j < maze.getColumnSize(); j++)
+                if(maze.getAtIndex(i,j) == 1)
+                {
+                    Random r = new Random();
+                    int result = r.nextInt(50);
+                    if(result == 5)
+                        questionBricksList.add(new Position(i,j));
+                }
     }
 
     /*
