@@ -22,6 +22,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -526,6 +527,10 @@ public class MyViewController implements Observer, IView, Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         mazeDisplayer.heightProperty().bind(borderPane_view.heightProperty().divide(1.1)/*.add(-100)*/);
         mazeDisplayer.widthProperty().bind(borderPane_view.widthProperty().divide(1.1).add(-150));
+
+        borderPane_view.setPrefHeight(Screen.getPrimary().getVisualBounds().getHeight()*((double)4/(double)5));
+        borderPane_view.setPrefWidth(Screen.getPrimary().getVisualBounds().getWidth()*((double)2/(double)3));
+
     }
     //endregion
 
