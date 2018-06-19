@@ -103,6 +103,9 @@ public class MyViewController implements Observer, IView, Initializable {
                 else if(((String)arg).equals("collideWithMushroom"))
                     playCollideMushroomSound();
             }
+            else if(arg instanceof Object[]){
+                System.out.println("hi");
+            }
             //displayMaze(viewModel.getMaze());
             //btn_generateMaze.setDisable(false);
         }
