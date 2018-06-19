@@ -168,7 +168,6 @@ public class StartSceneController implements Initializable{
             view.setViewModel(viewModel);
             viewModel.addObserver(view);
 
-            stage.setResizable(false);
             SetStageCloseEvent(stage, view);
             stage.show();
             Stage currentStage = (Stage) btn_start.getScene().getWindow();
