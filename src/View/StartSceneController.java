@@ -151,7 +151,7 @@ public class StartSceneController implements Initializable{
             Stage stage = new Stage();
             stage.setTitle("Amaze maze");
             FXMLLoader fxmlLoader = new FXMLLoader();
-            Parent root = fxmlLoader.load(getClass().getResource("View.fxml").openStream());
+            Parent root = fxmlLoader.load(getClass().getResource("MyView.fxml").openStream());
             Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
             //stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
             double setX = (primScreenBounds.getWidth() - stage.getWidth());
