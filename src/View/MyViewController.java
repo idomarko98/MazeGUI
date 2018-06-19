@@ -55,10 +55,8 @@ public class MyViewController implements Observer, IView, Initializable {
     public javafx.scene.control.TextField txtfld_columnsNum;
     public javafx.scene.control.Label lbl_rowsNum;
     public javafx.scene.control.Label lbl_columnsNum;
-    public javafx.scene.control.Label lbl_status;
     public javafx.scene.control.Button btn_generateMaze;
     public javafx.scene.control.Button btn_solveMaze;
-    public javafx.scene.control.Button btn_cancel;
     public javafx.scene.control.MenuItem menu_item_save;
     public javafx.scene.control.CheckMenuItem menu_item_blind;
     public javafx.scene.layout.BorderPane borderPane_view;
@@ -208,8 +206,6 @@ public class MyViewController implements Observer, IView, Initializable {
             showAlert("Height and Width must be larger than 3");
             return;
         }
-        lbl_status.setText("Status Bar: Generating Maze, please wait...");
-        btn_cancel.setVisible(true);
         btn_generateMaze.setDisable(true);
         mazeDisplayer.removeSolution();
         viewModel.generateMaze(width, heigth);
@@ -219,7 +215,6 @@ public class MyViewController implements Observer, IView, Initializable {
         }
         menu_item_save.setDisable(false);
         playTheme();
-        lbl_status.setText("Status Bar: Maze Generated");
     }
 
     private void playTheme() {
@@ -560,11 +555,6 @@ public class MyViewController implements Observer, IView, Initializable {
         }
     }
 
-    public void cancelGenerating(ActionEvent actionEvent) {
-        viewModel.stopServers();
-        btn_cancel.setVisible(false);
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         mazeDisplayer.heightProperty().bind(borderPane_view.heightProperty().divide(1.1)/*.add(-100)*/);
@@ -588,11 +578,11 @@ public class MyViewController implements Observer, IView, Initializable {
               //  playDirectionsAnd();
             if(posState.getRowIndex() == Integer.valueOf(getCharacterPositionRow()) && (posState.getColumnIndex() == Integer.valueOf(getCharacterPositionColumn()) + 1))//moving Right
                 playDirectionsRight();
-            if(posState.getRowIndex() == Integer.valueOf(getCharacterPositionRow()) && (posState.getColumnIndex() == Integer.valueOf(getCharacterPositionColumn()) - 1))//moving Right
+            if(posState.getRowIndex() == Integer.valueOf(getCharacterPositionRow()) && (posState.getColumnIndex() == Integer.valueOf(getCharacterPositionColumn()) - 1))//moving Left
                 playDirectionsLeft();
             if(posState.getRowIndex() == Integer.valueOf(getCharacterPositionRow()) + 1 && (posState.getColumnIndex() == Integer.valueOf(getCharacterPositionColumn())))//moving Down
                 playDirectionsDown();
-            if(posState.getRowIndex() == Integer.valueOf(getCharacterPositionRow()) - 1 && (posState.getColumnIndex() == Integer.valueOf(getCharacterPositionColumn())))//moving Down
+            if(posState.getRowIndex() == Integer.valueOf(getCharacterPositionRow()) - 1 && (posState.getColumnIndex() == Integer.valueOf(getCharacterPositionColumn())))//moving Up
                 playDirectionsUp();
         }
     }
