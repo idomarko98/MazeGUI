@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class MyMazeDisplayer extends Canvas {
@@ -64,6 +65,7 @@ public class MyMazeDisplayer extends Canvas {
     private Image gomba;
     private Image tortuga;
     private Image mushroom;
+    private Image questionBrick;
 
     private volatile Object lock;
     private volatile Object lock2;
@@ -73,6 +75,8 @@ public class MyMazeDisplayer extends Canvas {
     private volatile Object gombaLock;
     private volatile Object tortugaLock;
     private volatile Object mushroomLock;
+
+    private ArrayList<Position> questionBricksList;
 
 
     public MyMazeDisplayer() {
@@ -103,6 +107,7 @@ public class MyMazeDisplayer extends Canvas {
             shrink = false;
             gombaMovingRight = true;
             tortugaMovingRight = true;
+            questionBricksList = new ArrayList<>();
             /*
             Platform.runLater(new Runnable() {
                 @Override
@@ -124,12 +129,10 @@ public class MyMazeDisplayer extends Canvas {
             flag = new Image(this.getClass().getResourceAsStream("/images/Displayed On Maze/flag.png"));
             //character = new Image(new FileInputStream("resources/images/Mario Characters/mario_big_right01.png"));
             character = new Image(this.getClass().getResourceAsStream("/images/Mario Characters/mario_big_right01.png"));
-
             gomba = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/gomba_right_01.png"));
-
             tortuga = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/tortuga_right_01.png"));
-
             mushroom = new Image(this.getClass().getResourceAsStream("/images/Displayed On Maze/mushroom.png"));
+            questionBrick = new Image(this.getClass().getResourceAsStream("/images/Displayed On Maze/question.png"));
 
             ChangingCharactersImage();
             ChangingCoinImage();
@@ -361,6 +364,11 @@ public class MyMazeDisplayer extends Canvas {
                 canvasHeight = getHeight();
                 canvasWidth = getWidth();
             }
+            for(int i = 0; i < maze.getRowSize(); i++)
+                for(int j = 0; j < maze.getColumnSize(); j++)
+                {
+           //         if()
+                }
         }
 
         this.maze = maze;
@@ -646,7 +654,12 @@ public class MyMazeDisplayer extends Canvas {
             try{
                 synchronized (cellHeightAndWidthLock) {
                     if (maze.getAtIndex(row, column) == 1) {
-                        gc.drawImage(wall, startX + column * cellWidth, startY + row * cellHeight, cellWidth, cellHeight);
+                        Random r = new Random();
+                        int result = r.nextInt(10);
+                        if(result == 5)
+                            gc.drawImage(questionBrick, startX + column * cellWidth, startY + row * cellHeight, cellWidth, cellHeight);
+                        else
+                            gc.drawImage(wall, startX + column * cellWidth, startY + row * cellHeight, cellWidth, cellHeight);
                     } else if (row == maze.getGoalPosition().getRowIndex() && column == maze.getGoalPosition().getColumnIndex()) {
                         gc.drawImage(flag, startX + column * cellWidth, startY + row * cellHeight, cellWidth, cellHeight);
                     } else {
@@ -819,6 +832,13 @@ public class MyMazeDisplayer extends Canvas {
         }
     }
 
+    public double getCellHeight() {
+        return cellHeight;
+    }
+
+    public double getCellWidth() {
+        return cellWidth;
+    }
 
     /*
     public void changeCoin(int col, int row, double cellWidth, double cellHeight, GraphicsContext gc){
