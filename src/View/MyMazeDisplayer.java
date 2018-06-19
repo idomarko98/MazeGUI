@@ -39,6 +39,8 @@ public class MyMazeDisplayer extends Canvas {
     private int gombaPositionColumn;
     private int tortugaPositionRow;
     private int tortugaPositionColumn;
+    private int mushroomPositionRow;
+    private int mushroomPositionColumn;
     private boolean showSolution;
     public static boolean movingRight;
     public static boolean shrink;
@@ -57,9 +59,11 @@ public class MyMazeDisplayer extends Canvas {
     private Image wall;
     private Image path;
     private Image flag;
+    private Image coin;
     private Image character;
     private Image gomba;
     private Image tortuga;
+    private Image mushroom;
 
     private volatile Object lock;
     private volatile Object lock2;
@@ -68,8 +72,8 @@ public class MyMazeDisplayer extends Canvas {
     private volatile Object startPositionLock;
     private volatile Object gombaLock;
     private volatile Object tortugaLock;
+    private volatile Object mushroomLock;
 
-    private Image coin;
 
     public MyMazeDisplayer() {
         try {
@@ -125,10 +129,13 @@ public class MyMazeDisplayer extends Canvas {
 
             tortuga = new Image(this.getClass().getResourceAsStream("/images/Enemy Characters/tortuga_right_01.png"));
 
+            mushroom = new Image(this.getClass().getResourceAsStream("/images/Displayed On Maze/mushroom.png"));
+
             ChangingCharactersImage();
             ChangingCoinImage();
             ChagingGombaImage();
             ChagingTortugaImage();
+            drawMushroom();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -160,7 +167,7 @@ public class MyMazeDisplayer extends Canvas {
                     synchronized (gombaLock) {
                         drawGomba();
                     }
-                    Thread.sleep(200);
+                    Thread.sleep(1000);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -578,6 +585,22 @@ public class MyMazeDisplayer extends Canvas {
         }
     }
 
+    private void drawMushroom() {
+        if (maze != null) {
+            try {
+                try{
+                    synchronized (cellHeightAndWidthLock) {
+                        gc.drawImage(mushroom, startX + mushroomPositionColumn * cellWidth, startY + mushroomPositionRow * cellHeight, cellWidth, cellHeight);
+                    }
+                }
+                catch (Exception e){}
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     private void removePreviousCharacter() {
         drawSpot(previousCharacterPositionRow, previousCharacterPositionColumn);
     }
@@ -769,6 +792,16 @@ public class MyMazeDisplayer extends Canvas {
             this.tortugaPositionRow = tortugaPositionRowIndex;
             this.tortugaPositionColumn = tortugaPositionColumnIndex;
             drawTortuga();
+        }
+    }
+
+    public void setMushroomPosition(int mushroomPositionRowIndex, int mushroomPositionColumnIndex) {
+        synchronized (tortugaLock) {
+            //redraw();
+            drawSpot(mushroomPositionRow, mushroomPositionColumn);
+            this.mushroomPositionRow = mushroomPositionRowIndex;
+            this.mushroomPositionColumn = mushroomPositionColumnIndex;
+            drawMushroom();
         }
     }
 

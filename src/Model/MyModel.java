@@ -46,14 +46,20 @@ public class MyModel extends Observable implements IModel {
     private int tortugaPositionRow;
     private int tortugaPositionColumn;
 
+    private int mushroomPositionRow;
+    private int mushroomPositionColumn;
+
     private volatile Object gombaLock;
 
     private volatile Object tortugaLock;
+
+    private volatile Object mushroomLock;
 
     public MyModel() {
         //Raise the servers
         gombaLock = new Object();
         tortugaLock = new Object();
+        mushroomLock = new Object();
 
         maze = null;
         mazeSolution = null;
@@ -67,6 +73,9 @@ public class MyModel extends Observable implements IModel {
 
         tortugaPositionRow = 1;
         tortugaPositionColumn = 1;
+
+        mushroomPositionRow = 1;
+        mushroomPositionColumn = 1;
     }
 
     public void startServers() {
@@ -116,6 +125,7 @@ public class MyModel extends Observable implements IModel {
                                 setCharacterPosition(maze.getStartPosition());
                                 setGombaPosition(randomPositionOnMazePath());
                                 setTortugaPosition(randomPositionOnMazePath());
+                                setMushroomPosition(randomPositionOnMazePath());
                                 moveGomba();
                                 moveTortuga();
                             } catch (Exception e) {
@@ -276,11 +286,18 @@ public class MyModel extends Observable implements IModel {
                 notifySolved(true);
             if((characterPositionRow == tortugaPositionRow && characterPositionColumn == tortugaPositionColumn) || (characterPositionRow == gombaPositionRow && characterPositionColumn == gombaPositionColumn))
                 notifyCollide("collide");
+            if(characterPositionColumn == mushroomPositionColumn && characterPositionRow == mushroomPositionRow)
+                notifyCollideWithMushroom("collideWithMushroom");
         }
         /*
         setChanged();
         notifyObservers();
         */
+    }
+
+    private void notifyCollideWithMushroom(String collideWithMushroom) {
+        setChanged();
+        notifyObservers(collideWithMushroom);
     }
 
     private void notifyCollide(String colide) {
@@ -319,6 +336,8 @@ public class MyModel extends Observable implements IModel {
                 }
                 if (characterPositionRow == maze.getGoalPosition().getRowIndex() && characterPositionColumn == maze.getGoalPosition().getColumnIndex())
                     notifySolved(true);
+                if(characterPositionColumn == mushroomPositionColumn && characterPositionRow == mushroomPositionRow)
+                    notifyObservers("collideWithMushroom");
             }
         }
     }
@@ -372,6 +391,15 @@ public class MyModel extends Observable implements IModel {
         this.mazeSolution = solution;
         setChanged();
         notifyObservers(this.mazeSolution);
+    }
+
+    public void setMushroomPosition(Position mushroomPosition) {
+        synchronized (mushroomLock) {
+            this.mushroomPositionRow = mushroomPosition.getRowIndex();
+            this.mushroomPositionColumn = mushroomPosition.getColumnIndex();
+        }
+        setChanged();
+        notifyObservers("MushroomMoved");
     }
 
     private String gombaMoveToSide = "";
@@ -524,27 +552,6 @@ public class MyModel extends Observable implements IModel {
             tortugaMoveToSide = "Right";
         else
            tortugaMoveToSide = "";
-            /*
-            switch (result) {
-                case 0:
-                    tempRow++;
-                    gombaMoveToSide = "";
-                    break;
-                case 1:
-                    tempRow--;
-                    gombaMoveToSide = "";
-                    break;
-                case 2:
-                    tempCol++;
-                    gombaMoveToSide = "Right";
-                    break;
-                case 3:
-                    tempCol--;
-                    gombaMoveToSide = "Left";
-                    break;
-            }
-            */
-        //}while (maze.getAtIndex(tempRow,tempCol) != 0);
         return new Position(tempRow, tempCol);
     }
 
@@ -554,5 +561,13 @@ public class MyModel extends Observable implements IModel {
 
     public int getTortugaPositionColumnIndex(){
         return tortugaPositionColumn;
+    }
+
+    public int getMushroomPositionRowIndex(){
+        return mushroomPositionRow;
+    }
+
+    public int getMushroomPositionColumnIndex(){
+        return mushroomPositionColumn;
     }
 }

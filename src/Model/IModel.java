@@ -17,6 +17,9 @@ public interface IModel {
     int getGombaPositionColumnIndex();
     int getTortugaPositionRowIndex();
     int getTortugaPositionColumnIndex();
+    int getMushroomPositionRowIndex();
+    int getMushroomPositionColumnIndex();
+
     static void setConfigurations(int numberOfThreads, String generatingAlgorithmName, String solvingAlgorithmName){
         Server.Configurations.setProp(numberOfThreads, generatingAlgorithmName, solvingAlgorithmName);
     }

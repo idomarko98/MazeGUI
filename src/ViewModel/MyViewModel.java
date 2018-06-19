@@ -44,6 +44,9 @@ public class MyViewModel extends Observable implements Observer{
     private int tortugaPositionRowIndex;
     private int tortugaPositionColumnIndex;
 
+    private int mushroomPositionRowIndex;
+    private int mushroomPositionColumnIndex;
+
 
     public MyViewModel(IModel model){
         solutionPathLock = new Object();
@@ -54,9 +57,11 @@ public class MyViewModel extends Observable implements Observer{
         gombaPositionColumnIndex = 1;
         gombaPositionRowIndex = 1;
 
-
         tortugaPositionColumnIndex = 1;
         tortugaPositionRowIndex = 1;
+
+        mushroomPositionColumnIndex = 1;
+        mushroomPositionRowIndex = 1;
     }
 
     @Override
@@ -116,10 +121,16 @@ public class MyViewModel extends Observable implements Observer{
                     else if(side.equals("Right"))
                         MyMazeDisplayer.tortugaMovingRight = true;
                 }
+                else if(((String)arg).equals("MushroomMoved")){
+                    mushroomPositionRowIndex = model.getMushroomPositionRowIndex();
+                    mushroomPositionColumnIndex = model.getMushroomPositionColumnIndex();
+                }
                 else if(((String)arg).equals("collide")){
                     MyMazeDisplayer.shrink = true;
                     //
                 }
+                else if(((String)arg).equals("collideWithMushroom"))
+                    MyMazeDisplayer.shrink = false;
             }
             setChanged();
             notifyObservers(arg);
@@ -193,6 +204,14 @@ public class MyViewModel extends Observable implements Observer{
 
     public int getTortugaPositionColumnIndex(){
         return tortugaPositionColumnIndex;
+    }
+
+    public int getMushroomPositionRowIndex(){
+        return mushroomPositionRowIndex;
+    }
+
+    public int getMushroomPositionColumnIndex(){
+        return mushroomPositionColumnIndex;
     }
 
     public void stopServers() {

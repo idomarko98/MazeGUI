@@ -88,12 +88,24 @@ public class MyViewController implements Observer, IView {
                     updateGombaPosition();
                 else if(((String)arg).equals("TortugaMoved"))
                     updateTortugaPosition();
+                else if(((String)arg).equals("MushroomMoved")){
+                    updateMushroomPosition();
+                }
                 else if(((String)arg).equals("collide"))
                     playCollideSound();
+                else if(((String)arg).equals("collideWithMushroom"))
+                    playCollideMushroomSound();
             }
             //displayMaze(viewModel.getMaze());
             //btn_generateMaze.setDisable(false);
         }
+    }
+
+
+    private void playCollideMushroomSound() {
+        Media sound = new Media(this.getClass().getResource("/Sounds/resizing sound.mp3").toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
     }
 
     private void playCollideSound() {
@@ -108,6 +120,10 @@ public class MyViewController implements Observer, IView {
 
     private void updateTortugaPosition(){
         mazeDisplayer.setTortugaPosition(viewModel.getTortugaPositionRowIndex(), viewModel.getTortugaPositionColumnIndex());
+    }
+
+    private void updateMushroomPosition() {
+        mazeDisplayer.setMushroomPosition(viewModel.getMushroomPositionRowIndex(), viewModel.getMushroomPositionColumnIndex());
     }
 
     private void updateSolutionPath(ArrayList<AState> arg) {
